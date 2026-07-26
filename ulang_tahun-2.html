@@ -1,0 +1,3256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2b1055">
+<title>Happy Birthday, Sayang! 🎂✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ff6fa5; --pink-dark:#e8478c; --purple:#a06bff; --purple-dark:#7c3fe0;
+    --gold:#ffd166; --blue:#5fc8ff; --bg1:#2b1055; --bg2:#7597de;
+    --glass:rgba(255,255,255,.08); --glass-brd:rgba(255,255,255,.18);
+    --text:#ffffff; --text-dim:rgba(255,255,255,.75);
+  }
+  [data-theme="light"]{
+    --bg1:#ffe3f0; --bg2:#dcd0ff; --glass:rgba(255,255,255,.55); --glass-brd:rgba(120,80,150,.18);
+    --text:#3a1d5c; --text-dim:rgba(58,29,92,.75);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;font-family:'Poppins',sans-serif;overflow-x:hidden;color:var(--text);min-height:100vh;}
+  body{background:linear-gradient(135deg,var(--bg1),#4b1d7a 40%,var(--bg2));transition:background .5s;}
+  [data-theme="light"] body{background:linear-gradient(135deg,var(--bg1),#f5e6ff 40%,var(--bg2));}
+  .handwriting{font-family:'Dancing Script',cursive;}
+
+  #bgHearts,#auroraLayer,#cursorTrail{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+  #auroraLayer{
+    z-index:0;opacity:.5;
+    background:radial-gradient(ellipse at 20% 20%, rgba(255,111,165,.25), transparent 55%),
+               radial-gradient(ellipse at 80% 30%, rgba(160,107,255,.25), transparent 55%),
+               radial-gradient(ellipse at 50% 80%, rgba(95,200,255,.2), transparent 55%);
+    animation:auroraShift 14s ease-in-out infinite alternate;
+  }
+  @keyframes auroraShift{0%{filter:hue-rotate(0deg);transform:translateY(0);}100%{filter:hue-rotate(35deg);transform:translateY(-2%);}}
+  .float-heart{position:absolute;bottom:-50px;font-size:22px;opacity:.7;animation:floatUp linear infinite;filter:drop-shadow(0 0 6px rgba(255,111,165,.6));}
+  @keyframes floatUp{0%{transform:translateY(0) rotate(0deg);opacity:0;}10%{opacity:.8;}90%{opacity:.8;}100%{transform:translateY(-110vh) rotate(360deg);opacity:0;}}
+  .cursor-particle{position:fixed;pointer-events:none;z-index:70;border-radius:50%;background:radial-gradient(circle,#fff,var(--pink));animation:trailFade .7s forwards;}
+  @keyframes trailFade{to{transform:scale(0);opacity:0;}}
+
+  #confettiCanvas{position:fixed;inset:0;pointer-events:none;z-index:80;}
+
+  #controlCluster{position:fixed;top:12px;right:12px;z-index:90;display:flex;gap:8px;}
+  .ctrlBtn{
+    background:var(--glass);border:1px solid var(--glass-brd);color:var(--text);
+    border-radius:50%;width:42px;height:42px;font-size:18px;cursor:pointer;
+    backdrop-filter:blur(6px);transition:transform .2s,background .2s;
+  }
+  .ctrlBtn:hover{transform:scale(1.08);background:rgba(255,255,255,.22);}
+
+  #loadingScreen{
+    position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--bg1),#4b1d7a,var(--bg2));gap:18px;
+  }
+  .skeleton{width:min(300px,70vw);height:14px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.25),rgba(255,255,255,.08));background-size:200% 100%;animation:shimmer 1.2s infinite;}
+  @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+  .loading-heart{font-size:46px;animation:pulse 1s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
+
+  .screen{position:relative;z-index:1;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;}
+  .screen.active{display:flex;animation:screenIn .5s ease;}
+  @keyframes screenIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+
+  h1{font-size:clamp(26px,5.5vw,48px);background:linear-gradient(90deg,var(--gold),var(--pink),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:10px;text-shadow:0 0 30px rgba(255,111,165,.3);}
+  h2{font-size:clamp(20px,4vw,28px);margin-bottom:8px;}
+  p.subtitle{font-size:clamp(13px,2.3vw,17px);opacity:.9;margin-bottom:16px;color:var(--text-dim);}
+
+  .btn{background:linear-gradient(90deg,var(--pink),var(--purple));border:none;color:#fff;padding:14px 32px;border-radius:50px;font-size:16px;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(160,107,255,.4);transition:transform .2s,box-shadow .2s;margin:8px;}
+  .btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 12px 26px rgba(160,107,255,.55);}
+  .btn:active{transform:translateY(0) scale(.98);}
+  .btn:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+  .btn.secondary{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);}
+  .btn.small{padding:9px 18px;font-size:13px;}
+
+  .glass-box{background:var(--glass);border:1px solid var(--glass-brd);border-radius:22px;padding:26px 18px;width:min(560px,94vw);backdrop-filter:blur(8px);}
+  .topbar{display:flex;justify-content:space-between;align-items:center;width:min(560px,94vw);margin-bottom:14px;}
+  .topbar .back{font-size:14px;opacity:.85;cursor:pointer;color:var(--text-dim);}
+  .topbar .back:hover{opacity:1;text-decoration:underline;}
+
+  #screenCinematic{background:radial-gradient(circle at 50% 40%,#3a1a6b,#160a30 70%);overflow:hidden;}
+  .cine-logo{font-size:64px;animation:logoPop 1.4s ease forwards;filter:drop-shadow(0 0 25px var(--pink));}
+  @keyframes logoPop{0%{transform:scale(0) rotate(-30deg);opacity:0;}60%{transform:scale(1.15) rotate(6deg);opacity:1;}100%{transform:scale(1) rotate(0);}}
+  .cine-countdown{font-size:clamp(60px,14vw,110px);font-weight:800;color:var(--gold);text-shadow:0 0 30px var(--pink);}
+  .cine-names{font-size:clamp(28px,7vw,54px);margin-top:14px;}
+  .cine-names span{opacity:0;animation:handwriteIn .6s forwards;}
+  @keyframes handwriteIn{from{opacity:0;transform:translateY(10px) skewX(-8deg);}to{opacity:1;transform:translateY(0) skewX(0);}}
+  .shooting-star{position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;box-shadow:0 0 8px 2px #fff;animation:shoot 1.6s linear forwards;}
+  @keyframes shoot{from{transform:translate(0,0);opacity:1;}to{transform:translate(-260px,220px);opacity:0;}}
+  .petal{position:absolute;top:-30px;font-size:18px;animation:petalFall linear forwards;}
+  @keyframes petalFall{to{transform:translateY(110vh) translateX(var(--drift,40px)) rotate(360deg);opacity:.2;}}
+  .lightray{position:absolute;top:-20%;left:50%;width:2px;height:140%;background:linear-gradient(to bottom,rgba(255,255,255,.35),transparent);transform-origin:top center;animation:raySpin 10s linear infinite;}
+  @keyframes raySpin{from{transform:translateX(-50%) rotate(0deg);}to{transform:translateX(-50%) rotate(360deg);}}
+
+  #envelopeWrap{cursor:pointer;position:relative;width:260px;height:180px;margin:30px auto;}
+  .envelope-body{position:absolute;inset:0;background:linear-gradient(135deg,#ffe3ef,#ffd1e6);border-radius:10px;box-shadow:0 20px 50px rgba(0,0,0,.4);}
+  .envelope-flap{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,var(--pink),var(--pink-dark));clip-path:polygon(0 0,50% 55%,100% 0);transform-origin:top;transition:transform .8s cubic-bezier(.68,-0.55,.27,1.55);border-radius:10px 10px 0 0;}
+  #envelopeWrap.open .envelope-flap{transform:rotateX(180deg);}
+  .heart-seal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:30px;z-index:2;animation:pulse 1.4s ease-in-out infinite;}
+
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;width:min(760px,94vw);}
+  .menu-card{background:var(--glass);border:1px solid var(--glass-brd);border-radius:18px;padding:20px 10px;cursor:pointer;transition:transform .25s,background .25s;font-size:14px;font-weight:600;}
+  .menu-card:hover{transform:translateY(-6px);background:rgba(255,255,255,.18);}
+  .menu-card .icon{font-size:32px;display:block;margin-bottom:6px;}
+
+  #xpWrap{width:min(400px,90vw);margin:6px 0 20px;}
+  #xpLabel{font-size:13px;color:var(--gold);font-weight:700;margin-bottom:4px;}
+  #xpBar{height:12px;border-radius:8px;background:rgba(255,255,255,.15);overflow:hidden;}
+  #xpFill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--purple),var(--pink));transition:width .6s ease;}
+
+  #mascot{position:fixed;bottom:16px;left:16px;z-index:85;cursor:pointer;text-align:left;}
+  #mascotFace{font-size:44px;animation:mascotBob 2.4s ease-in-out infinite;filter:drop-shadow(0 4px 10px rgba(0,0,0,.3));}
+  @keyframes mascotBob{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-8px) rotate(4deg);}}
+  #mascotBubble{
+    position:absolute;bottom:58px;left:0;background:#fff;color:#3a1d5c;padding:10px 14px;border-radius:14px 14px 14px 2px;
+    font-size:13px;font-weight:600;max-width:200px;box-shadow:0 6px 16px rgba(0,0,0,.3);opacity:0;transform:translateY(6px);
+    transition:opacity .25s,transform .25s;pointer-events:none;
+  }
+  #mascotBubble.show{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+<style>
+  /* ===== Story / Visual Novel ===== */
+  .vn-stage{width:min(560px,94vw);height:340px;border-radius:20px;position:relative;overflow:hidden;margin-bottom:0;
+    background:linear-gradient(160deg,var(--purple-dark),var(--pink-dark));display:flex;align-items:center;justify-content:center;font-size:70px;}
+  .vn-avatar{position:absolute;bottom:0;font-size:90px;animation:vnBob 3s ease-in-out infinite;}
+  @keyframes vnBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+  .vn-box{width:min(560px,94vw);background:rgba(20,10,40,.75);border:1px solid var(--glass-brd);border-radius:0 0 20px 20px;padding:16px 18px;min-height:100px;text-align:left;backdrop-filter:blur(6px);}
+  .vn-speaker{color:var(--gold);font-weight:700;font-size:14px;margin-bottom:6px;}
+  .vn-text{font-size:15px;line-height:1.6;min-height:48px;}
+  .vn-next{text-align:right;font-size:12px;opacity:.7;margin-top:6px;cursor:pointer;animation:blink 1.4s infinite;}
+  @keyframes blink{50%{opacity:.2;}}
+  .chapter-dots{display:flex;gap:6px;margin-bottom:10px;}
+  .chapter-dots span{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.25);}
+  .chapter-dots span.active{background:var(--gold);}
+
+  /* ===== Timeline ===== */
+  .timeline{width:min(600px,94vw);position:relative;padding-left:28px;text-align:left;}
+  .timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:3px;background:linear-gradient(var(--gold),var(--pink),var(--purple));border-radius:3px;}
+  .tl-item{position:relative;margin-bottom:26px;background:var(--glass);border:1px solid var(--glass-brd);border-radius:14px;padding:14px 16px;}
+  .tl-item::before{content:'';position:absolute;left:-27px;top:16px;width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--pink);}
+  .tl-date{font-size:12px;color:var(--gold);font-weight:700;}
+  .tl-title{font-size:16px;font-weight:700;margin:4px 0;}
+  .tl-desc{font-size:13px;color:var(--text-dim);}
+
+  /* ===== Gallery ===== */
+  .gallery-stage{position:relative;width:min(340px,88vw);height:420px;margin:14px auto;}
+  .polaroid{
+    position:absolute;inset:0;background:#fff;border-radius:8px;padding:14px 14px 50px;
+    box-shadow:0 20px 40px rgba(0,0,0,.4);transition:transform .5s,opacity .5s;color:#333;
+  }
+  .polaroid .photo-area{width:100%;height:100%;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:60px;}
+  .polaroid .caption{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-family:'Dancing Script',cursive;font-size:20px;color:#444;}
+  .gallery-nav{display:flex;gap:14px;justify-content:center;margin-top:10px;}
+  #galleryFullscreen{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:150;display:none;align-items:center;justify-content:center;}
+  #galleryFullscreen.show{display:flex;}
+  #galleryFullscreen .photo-area{width:min(500px,90vw);height:min(500px,70vh);}
+
+  /* ===== Video ===== */
+  .cinema-frame{width:min(560px,94vw);aspect-ratio:16/9;background:#000;border-radius:16px;position:relative;overflow:hidden;box-shadow:0 0 0 8px #111,0 20px 50px rgba(0,0,0,.5);}
+  .cinema-frame video{width:100%;height:100%;object-fit:cover;}
+  .cinema-frame::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 80px 20px rgba(0,0,0,.6);pointer-events:none;}
+  .play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:60px;color:#fff;cursor:pointer;background:rgba(0,0,0,.35);transition:opacity .3s;}
+  .play-overlay.hidden{opacity:0;pointer-events:none;}
+
+  /* ===== Music Player ===== */
+  .player-card{width:min(360px,90vw);background:var(--glass);border:1px solid var(--glass-brd);border-radius:24px;padding:24px;backdrop-filter:blur(8px);}
+  .cover-art{width:160px;height:160px;border-radius:20px;margin:0 auto 14px;background:linear-gradient(135deg,var(--pink),var(--purple));display:flex;align-items:center;justify-content:center;font-size:60px;animation:coverSpin 12s linear infinite paused;box-shadow:0 12px 30px rgba(0,0,0,.4);}
+  .cover-art.playing{animation-play-state:running;}
+  @keyframes coverSpin{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+  #trackTitle{font-weight:700;font-size:16px;margin-top:4px;}
+  #trackArtist{font-size:12px;color:var(--text-dim);margin-bottom:10px;}
+  .prog-row{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-dim);margin:8px 0;}
+  #musicProgBar{flex:1;height:5px;border-radius:6px;background:rgba(255,255,255,.2);cursor:pointer;position:relative;}
+  #musicProgFill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--pink));width:0%;}
+  .player-controls{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:8px;}
+  .player-controls button{background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;}
+  .player-controls button.play-btn{font-size:34px;}
+  .player-controls button.active-toggle{color:var(--gold);}
+  #volumeRow{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:14px;}
+  #volumeRow input{flex:1;}
+  .playlist-item{display:flex;justify-content:space-between;padding:8px 10px;border-radius:8px;font-size:13px;cursor:pointer;text-align:left;}
+  .playlist-item:hover{background:rgba(255,255,255,.1);}
+  .playlist-item.current{background:rgba(255,209,102,.2);color:var(--gold);}
+
+  /* ===== Achievement ===== */
+  .ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;width:min(720px,94vw);max-height:60vh;overflow-y:auto;padding:6px;}
+  .ach-card{background:var(--glass);border:1px solid var(--glass-brd);border-radius:14px;padding:12px 8px;font-size:11px;opacity:.4;transition:opacity .3s,transform .3s;}
+  .ach-card.unlocked{opacity:1;border-color:var(--gold);}
+  .ach-card .aicon{font-size:26px;display:block;margin-bottom:4px;}
+  .ach-card .atitle{font-weight:700;font-size:12px;}
+
+  /* ===== Gift Box ===== */
+  .gift-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:14px;width:min(600px,94vw);}
+  .gift-box{background:var(--glass);border:1px solid var(--glass-brd);border-radius:16px;padding:20px 8px;cursor:pointer;font-size:38px;transition:transform .3s;}
+  .gift-box:hover{transform:scale(1.08) rotate(-3deg);}
+  .gift-box.opened{opacity:.5;cursor:default;}
+  #giftReveal{margin-top:16px;font-size:16px;font-weight:700;color:var(--gold);min-height:24px;}
+
+  /* ===== Letter ===== */
+  .letter-paper{width:min(560px,94vw);max-height:60vh;overflow-y:auto;background:rgba(255,250,240,.95);color:#4a2f1c;border-radius:12px;padding:26px 22px;text-align:left;font-family:'Dancing Script',cursive;font-size:20px;line-height:1.8;box-shadow:0 20px 50px rgba(0,0,0,.4);}
+
+  /* ===== Guest book / Share / Leaderboard ===== */
+  .gb-entry{background:var(--glass);border:1px solid var(--glass-brd);border-radius:10px;padding:8px 12px;margin:6px 0;font-size:13px;text-align:left;}
+  .gb-input{width:100%;padding:10px;border-radius:10px;border:1px solid var(--glass-brd);background:rgba(255,255,255,.08);color:var(--text);margin:6px 0;font-family:inherit;}
+  .share-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:10px;}
+  .share-btn{padding:10px 16px;border-radius:12px;border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;}
+  .lb-row{display:flex;justify-content:space-between;padding:8px 14px;font-size:13px;border-bottom:1px solid var(--glass-brd);}
+
+  /* ===== Ending page extras ===== */
+  .cake{font-size:90px;position:relative;margin:10px 0;cursor:pointer;}
+  .candle-flame{display:inline-block;animation:flick .3s infinite alternate;}
+  .candle-flame.out{animation:none;opacity:0;}
+  @keyframes flick{from{transform:scale(1);}to{transform:scale(1.25) rotate(4deg);}}
+  #finalMsg{max-width:560px;font-size:17px;line-height:1.7;background:var(--glass);border:1px solid var(--glass-brd);border-radius:18px;padding:22px;margin-top:16px;}
+  .sparkle{position:absolute;font-size:18px;animation:sparkle 1.5s ease-in-out infinite;}
+  @keyframes sparkle{0%,100%{opacity:0;transform:scale(.5);}50%{opacity:1;transform:scale(1.2);}}
+  .certificate{width:min(420px,90vw);border:6px solid var(--gold);border-radius:16px;padding:24px;background:rgba(255,255,255,.08);margin-top:16px;}
+  .certificate .cert-title{font-family:'Dancing Script',cursive;font-size:30px;color:var(--gold);}
+  #countdownNext{font-size:15px;color:var(--text-dim);margin-top:10px;}
+  .balloon-fly{position:fixed;bottom:-60px;font-size:34px;animation:balloonFly 5s ease-in forwards;z-index:60;}
+  @keyframes balloonFly{to{transform:translateY(-120vh) translateX(var(--bx,20px));opacity:0;}}
+</style>
+<style>
+  /* ===== Game hub ===== */
+  #progressBar{width:min(560px,90vw);height:14px;background:rgba(255,255,255,.15);border-radius:10px;overflow:hidden;margin:10px 0 25px;}
+  #progressFill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--pink));transition:width .5s ease;}
+  .game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;width:min(820px,94vw);}
+  .game-card{background:var(--glass);border:1px solid var(--glass-brd);border-radius:18px;padding:16px 8px;cursor:pointer;transition:transform .25s,background .25s;position:relative;font-size:13px;}
+  .game-card:hover{transform:translateY(-6px);background:rgba(255,255,255,.16);}
+  .game-card .icon{font-size:28px;display:block;margin-bottom:6px;}
+  .game-card .status{position:absolute;top:6px;right:8px;font-size:15px;}
+  .game-card.done{border-color:var(--gold);}
+  .game-card.soon{opacity:.45;cursor:default;}
+  .stars-mini{font-size:11px;color:var(--gold);margin-top:2px;}
+
+  .game-box{background:var(--glass);border:1px solid var(--glass-brd);border-radius:22px;padding:26px 18px;width:min(560px,94vw);backdrop-filter:blur(6px);}
+  .star-row{font-size:26px;margin:8px 0;letter-spacing:4px;}
+  .star-row .dim{opacity:.25;}
+  #g1Range{width:100%;margin:16px 0;}
+  #g1Hint{min-height:26px;font-size:17px;font-weight:600;margin:10px 0;color:var(--gold);}
+  #g1Num{font-size:44px;font-weight:800;color:var(--pink);}
+
+  .memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0;}
+  .card{aspect-ratio:1/1;background:linear-gradient(135deg,var(--purple),var(--pink));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;user-select:none;transition:transform .4s;}
+  .card.flip{background:rgba(255,255,255,.15);}
+  .card.matched{background:rgba(255,209,102,.35);cursor:default;}
+
+  #catchArea{position:relative;width:100%;height:340px;background:rgba(0,0,0,.2);border-radius:16px;overflow:hidden;margin:14px 0;}
+  .falling{position:absolute;top:-30px;font-size:26px;cursor:pointer;user-select:none;animation:fall linear forwards;}
+  @keyframes fall{to{top:340px;}}
+  #catchScore{font-size:19px;font-weight:700;color:var(--gold);}
+
+  .quiz-q{font-size:18px;margin:14px 0;font-weight:600;}
+  .quiz-opt{display:block;width:100%;text-align:left;background:rgba(255,255,255,.1);border:1px solid var(--glass-brd);color:var(--text);padding:12px 16px;border-radius:12px;margin:8px 0;cursor:pointer;font-size:15px;transition:.2s;}
+  .quiz-opt:hover{background:rgba(255,255,255,.2);}
+  .quiz-opt.correct{background:rgba(120,220,140,.5);border-color:#78dc8c;}
+  .quiz-opt.wrong{background:rgba(220,80,90,.5);border-color:#dc505a;}
+
+  #balloonArea{position:relative;width:100%;height:380px;overflow:hidden;border-radius:16px;background:rgba(0,0,0,.2);margin:14px 0;}
+  .balloon{position:absolute;bottom:-80px;width:52px;height:64px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;cursor:pointer;animation:rise linear forwards;}
+  .balloon::after{content:'';position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);width:1px;height:14px;background:rgba(255,255,255,.5);}
+  @keyframes rise{to{bottom:400px;}}
+  #balloonMsg{min-height:30px;font-size:18px;letter-spacing:2px;font-weight:700;color:var(--gold);margin-top:8px;}
+
+  .scramble-slot{min-height:54px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0;padding:10px;background:rgba(255,255,255,.05);border-radius:12px;}
+  .scramble-letters{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0;}
+  .letter-tile{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--pink));border:none;color:#fff;font-size:20px;font-weight:700;cursor:pointer;}
+  .letter-tile.filled{background:rgba(255,209,102,.35);}
+  #scrambleHint{min-height:24px;color:var(--gold);font-weight:600;margin-top:8px;}
+
+  .simon-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:230px;margin:16px auto;}
+  .simon-pad{aspect-ratio:1/1;border-radius:16px;cursor:pointer;opacity:.55;transition:opacity .15s,transform .15s;}
+  .simon-pad.active{opacity:1;transform:scale(1.06);box-shadow:0 0 22px rgba(255,255,255,.6);}
+  #simonRound{font-size:16px;font-weight:600;color:var(--gold);margin:6px 0;}
+
+  .ttt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:220px;margin:16px auto;}
+  .ttt-cell{aspect-ratio:1/1;background:rgba(255,255,255,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;}
+
+  .mole-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:260px;margin:16px auto;}
+  .mole-hole{aspect-ratio:1/1;background:rgba(255,255,255,.08);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;}
+  .mole-hole.up{background:rgba(255,111,165,.28);}
+  #moleScore{font-size:19px;font-weight:700;color:var(--gold);}
+
+  .wheel-wrap{position:relative;width:230px;height:230px;margin:18px auto;}
+  .wheel{width:100%;height:100%;border-radius:50%;border:6px solid rgba(255,255,255,.35);transition:transform 4.2s cubic-bezier(.17,.67,.12,.99);}
+  .wheel-pointer{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:24px;z-index:2;color:var(--gold);}
+
+  /* Game 11: Puzzle Foto */
+  .puzzle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:240px;margin:16px auto;}
+  .puzzle-tile{aspect-ratio:1/1;background:linear-gradient(135deg,var(--pink),var(--purple));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;cursor:pointer;color:#fff;}
+  .puzzle-tile.empty{background:rgba(255,255,255,.05);cursor:default;}
+  #puzzleMoves{font-size:14px;color:var(--gold);font-weight:700;margin-bottom:4px;}
+
+  /* Game 12/13/16: canvas games */
+  .game-canvas-wrap{position:relative;width:100%;max-width:340px;margin:14px auto;}
+  canvas.gameCanvas{width:100%;background:rgba(0,0,0,.25);border-radius:14px;touch-action:none;}
+  .canvas-score{font-size:16px;font-weight:700;color:var(--gold);margin-bottom:6px;}
+  .canvas-overlay-btn{margin-top:10px;}
+
+  /* Game 14: Match Color */
+  .color-target{width:70px;height:70px;border-radius:16px;margin:12px auto;box-shadow:0 8px 20px rgba(0,0,0,.4);}
+  .color-opts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:260px;margin:10px auto;}
+  .color-opt{aspect-ratio:1/1;border-radius:12px;cursor:pointer;border:2px solid rgba(255,255,255,.3);}
+
+  /* Game 17: Maze Love */
+  .maze-grid{display:grid;gap:2px;width:260px;margin:14px auto;background:rgba(0,0,0,.3);padding:4px;border-radius:12px;}
+  .maze-cell{aspect-ratio:1/1;border-radius:3px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:14px;}
+  .maze-cell.wall{background:rgba(160,107,255,.55);}
+  .maze-cell.player{background:rgba(255,111,165,.5);}
+  .maze-cell.goal{background:rgba(255,209,102,.5);}
+
+  /* Game 18: Cari Perbedaan */
+  .diff-boards{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .diff-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;width:150px;background:rgba(0,0,0,.2);padding:4px;border-radius:10px;}
+  .diff-cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-size:16px;border-radius:4px;cursor:pointer;background:rgba(255,255,255,.05);}
+  .diff-cell.found{background:rgba(120,220,140,.5);}
+  .diff-cell.wrong-flash{background:rgba(220,80,90,.5);}
+
+  /* Game 21: Tangkap Hadiah */
+  #giftCatchArea{position:relative;width:100%;height:340px;background:rgba(0,0,0,.2);border-radius:16px;overflow:hidden;margin:14px 0;}
+  #giftBasket{position:absolute;bottom:6px;font-size:36px;transition:left .08s linear;}
+  .falling-gift{position:absolute;top:-30px;font-size:26px;animation:fall linear forwards;}
+
+  /* Game 22: Escape Room */
+  .escape-clue{background:rgba(255,255,255,.08);border-radius:12px;padding:14px;margin:10px 0;font-size:14px;text-align:left;}
+  #escapeCodeInput{width:160px;text-align:center;font-size:22px;letter-spacing:6px;padding:10px;border-radius:10px;border:1px solid var(--glass-brd);background:rgba(255,255,255,.08);color:var(--text);}
+  #escapeMsg{min-height:22px;color:var(--gold);font-weight:600;margin-top:8px;}
+
+  /* Game 24: Fruit Slice Love */
+  #sliceTrail{position:absolute;pointer-events:none;}
+
+  /* Toast + modal */
+  #toastWrap{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:220;display:flex;flex-direction:column;gap:8px;align-items:center;}
+  .toast{background:rgba(20,10,40,.9);border:1px solid var(--gold);color:#fff;padding:10px 18px;border-radius:12px;font-size:13px;font-weight:600;animation:toastIn .3s ease, toastOut .4s ease 2.6s forwards;box-shadow:0 8px 20px rgba(0,0,0,.4);}
+  @keyframes toastIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes toastOut{to{opacity:0;transform:translateY(-10px);}}
+  #secretModal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:250;display:none;align-items:center;justify-content:center;}
+  #secretModal.show{display:flex;}
+  .secret-box{background:linear-gradient(160deg,#3a1a6b,#160a30);border:2px solid var(--gold);border-radius:20px;padding:26px;width:min(340px,88vw);text-align:center;}
+
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.3);border-radius:6px;}
+</style>
+
+<!-- ===== Loading Screen ===== -->
+<div id="loadingScreen">
+  <div class="loading-heart">💗</div>
+  <div class="skeleton"></div>
+  <div class="skeleton" style="width:60%"></div>
+  <p style="opacity:.7;font-size:13px;">Menyiapkan kejutan untukmu...</p>
+</div>
+
+<div id="auroraLayer"></div>
+<div id="bgHearts"></div>
+<canvas id="confettiCanvas"></canvas>
+<div id="toastWrap"></div>
+
+<div id="controlCluster">
+  <button class="ctrlBtn" id="musicToggle" title="Musik latar">🔇</button>
+  <button class="ctrlBtn" id="themeToggle" title="Mode gelap/terang">🌙</button>
+  <button class="ctrlBtn" id="fullscreenToggle" title="Layar penuh">⛶</button>
+</div>
+
+<div id="mascot">
+  <div id="mascotBubble"></div>
+  <div id="mascotFace">🐰</div>
+</div>
+
+<div id="secretModal">
+  <div class="secret-box">
+    <h2>🔒 Mode Rahasia</h2>
+    <p class="subtitle" id="secretModalText">Masukkan kode rahasia...</p>
+    <input class="gb-input" id="secretInput" placeholder="Kode rahasia">
+    <button class="btn small" id="secretSubmit">Buka</button>
+    <button class="btn small secondary" id="secretClose">Tutup</button>
+  </div>
+</div>
+
+<div id="galleryFullscreen">
+  <div class="photo-area" id="galleryFullPhoto" style="background:linear-gradient(135deg,#a06bff,#ff6fa5);border-radius:16px;"></div>
+</div>
+
+<!-- ================= CINEMATIC INTRO ================= -->
+<div class="screen active" id="screenCinematic">
+  <div id="cineLayer" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;"></div>
+  <div id="cineLogoWrap">
+    <div class="cine-logo">💖</div>
+    <p class="subtitle" style="margin-top:10px;">sebuah kejutan kecil untukmu</p>
+  </div>
+  <div id="cineCountdown" class="cine-countdown" style="display:none;"></div>
+  <div id="cineNames" class="cine-names handwriting" style="display:none;"></div>
+  <p class="subtitle" id="cineTapHint" style="display:none;margin-top:20px;">👆 tap layar untuk lanjut</p>
+</div>
+
+<!-- ================= ENVELOPE (existing) ================= -->
+<div class="screen" id="screenIntro">
+  <h1>Untuk Kamu, Sayang 💌</h1>
+  <p class="subtitle">Ada kejutan spesial buat hari ulang tahunmu... buka amplopnya yuk!</p>
+  <div id="envelopeWrap">
+    <div class="envelope-body"></div>
+    <div class="envelope-flap"></div>
+    <div class="heart-seal">💖</div>
+  </div>
+  <p class="subtitle" id="tapHint">👆 tap amplopnya</p>
+</div>
+
+<!-- ================= MAIN MENU ================= -->
+<div class="screen" id="screenMenu">
+  <h1 style="font-size:clamp(22px,4.5vw,34px)">Selamat Ulang Tahun! 🎉</h1>
+  <p class="subtitle">Jelajahi semua kejutan yang sudah aku siapkan</p>
+  <div id="xpWrap">
+    <div id="xpLabel">Level 1 · 0 XP</div>
+    <div id="xpBar"><div id="xpFill"></div></div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-card" data-nav="screenStory"><span class="icon">📖</span>Cerita Kita</div>
+    <div class="menu-card" data-nav="screenTimeline"><span class="icon">📅</span>Timeline</div>
+    <div class="menu-card" data-nav="screenGallery"><span class="icon">📷</span>Galeri</div>
+    <div class="menu-card" data-nav="screenVideo"><span class="icon">🎥</span>Video</div>
+    <div class="menu-card" data-nav="screenMusic"><span class="icon">🎵</span>Musik</div>
+    <div class="menu-card" data-nav="screenHub"><span class="icon">🎮</span>Mini Games</div>
+    <div class="menu-card" data-nav="screenAchievements"><span class="icon">🏆</span>Achievement</div>
+    <div class="menu-card" data-nav="screenGift"><span class="icon">🎁</span>Hadiah</div>
+    <div class="menu-card" data-nav="screenLetter"><span class="icon">💌</span>Surat</div>
+    <div class="menu-card" data-nav="screenSocial"><span class="icon">🌐</span>Guest Book</div>
+    <div class="menu-card" data-nav="screenFinal" id="menuFinalCard"><span class="icon">🎂</span>Kejutan Akhir</div>
+  </div>
+</div>
+
+<!-- ================= STORY / VISUAL NOVEL ================= -->
+<div class="screen" id="screenStory">
+  <div class="topbar"><span class="back">⟵ Menu</span><span>Cerita Kita</span></div>
+  <div class="chapter-dots" id="chapterDots"></div>
+  <div class="vn-stage" id="vnStage">
+    <span id="vnBg">🌅</span>
+    <span class="vn-avatar" id="vnAvatar">🙂</span>
+  </div>
+  <div class="vn-box">
+    <div class="vn-speaker" id="vnSpeaker">...</div>
+    <div class="vn-text" id="vnText">...</div>
+    <div class="vn-next" id="vnNext">tap untuk lanjut ▶</div>
+  </div>
+</div>
+
+<!-- ================= TIMELINE ================= -->
+<div class="screen" id="screenTimeline">
+  <div class="topbar"><span class="back">⟵ Menu</span><span>Timeline</span></div>
+  <h2>📖 Perjalanan Kita</h2>
+  <div class="timeline" id="timelineList"></div>
+</div>
+
+<!-- ================= GALLERY ================= -->
+<div class="screen" id="screenGallery">
+  <div class="topbar"><span class="back">⟵ Menu</span><span>Galeri</span></div>
+  <h2>📷 Album Kenangan</h2>
+  <p class="subtitle">Geser atau tap panah untuk lihat foto lainnya</p>
+  <div class="gallery-stage" id="galleryStage"></div>
+  <div class="gallery-nav">
+    <button class="btn small secondary" id="galleryPrev">⟵ Prev</button>
+    <button class="btn small secondary" id="galleryZoom">🔍 Zoom</button>
+    <button class="btn small secondary" id="galleryNext">Next ⟶</button>
+  </div>
+</div>
+
+<!-- ================= VIDEO ================= -->
+<div class="screen" id="screenVideo">
+  <div class="topbar"><span class="back">⟵ Menu</span><span>Video</span></div>
+  <h2>🎥 Video Ucapan</h2>
+  <p class="subtitle">Ganti sumber video di bagian konfigurasi script (VIDEO_SRC)</p>
+  <div class="cinema-frame">
+    <video id="birthdayVideo" playsinline></video>
+    <div class="play-overlay" id="videoPlayOverlay">▶️</div>
+  </div>
+</div>
+
+<!-- ================= MUSIC PLAYER ================= -->
+<div class="screen" id="screenMusic">
+  <div class="topbar"><span class="back">⟵ Menu</span><span>Musik</span></div>
+  <div class="player-card">
+    <div class="cover-art" id="coverArt">🎵</div>
+    <div id="trackTitle">-</div>
+    <div id="trackArtist">-</div>
+    <div class="prog-row">
+      <span id="curTime">0:00</span>
+      <div id="musicProgBar"><div id="musicProgFill"></div></div>
+      <span id="durTime">0:00</span>
+    </div>
+    <div class="player-controls">
+      <button id="shuffleBtn" title="Shuffle">🔀</button>
+      <button id="prevBtn" title="Previous">⏮</button>
+      <button id="playPauseBtn" class="play-btn" title="Play/Pause">▶️</button>
+      <button id="nextBtn" title="Next">⏭</button>
+      <button id="repeatBtn" title="Repeat">🔁</button>
+    </div>
+    <div id="volumeRow">🔈<input type="range" id="volumeSlider" min="0" max="100" value="70"></div>
+    <div id="playlistBox" style="margin-top:14px;max-height:140px;overflow-y:auto;"></div>
+  </div>
+</div>
+
+<!-- ================= ACHIEVEMENTS ================= -->
+<div class="screen" id="screenAchievements">
+  <div class="topbar"><span class="back">⟵ Menu</span><span>Achievement</span></div>
+  <h2>🏆 Pencapaian</h2>
+  <p class="subtitle" id="achSummary">0/30 terbuka</p>
+  <div class="ach-grid" id="achGrid"></div>
+</div>
+
+<!-- ================= GIFT BOX ================= -->
+<div class="screen" id="screenGift">
+  <div class="topbar"><span class="back">⟵ Menu</span><span>Hadiah</span></div>
+  <h2>🎁 Kotak Hadiah</h2>
+  <p class="subtitle">Buka setiap kotak untuk hadiah kejutan!</p>
+  <div class="gift-grid" id="giftGrid"></div>
+  <div id="giftReveal"></div>
+</div>
+
+<!-- ================= LETTER ================= -->
+<div class="screen" id="screenLetter">
+  <div class="topbar"><span class="back">⟵ Menu</span><span>Surat</span></div>
+  <h2 class="handwriting" style="font-size:30px;">💌 Sepucuk Surat</h2>
+  <div class="letter-paper" id="letterPaper"></div>
+  <button class="btn small secondary" id="letterSkip">Tampilkan Semua</button>
+</div>
+
+<!-- ================= SOCIAL / GUEST BOOK ================= -->
+<div class="screen" id="screenSocial">
+  <div class="topbar"><span class="back">⟵ Menu</span><span>Guest Book</span></div>
+  <h2>🌐 Guest Book &amp; Berbagi</h2>
+  <div class="glass-box">
+    <input class="gb-input" id="gbName" placeholder="Nama kamu">
+    <input class="gb-input" id="gbMsg" placeholder="Tulis ucapan...">
+    <button class="btn small" id="gbSubmit">Kirim ❤️</button>
+    <div id="gbList" style="margin-top:10px;max-height:160px;overflow-y:auto;"></div>
+    <button class="btn small secondary" id="likeBtn">👍 Suka (<span id="likeCount">0</span>)</button>
+    <div class="share-row">
+      <button class="share-btn" style="background:#25D366" id="shareWA">WhatsApp</button>
+      <button class="share-btn" style="background:#E1306C" id="shareIG">Instagram</button>
+      <button class="share-btn" style="background:#000" id="shareTT">TikTok</button>
+      <button class="share-btn" style="background:#1877F2" id="shareFB">Facebook</button>
+    </div>
+    <h2 style="margin-top:18px;font-size:18px;">🏅 Leaderboard Skor (lokal)</h2>
+    <div id="lbList"></div>
+    <p class="subtitle" style="margin-top:8px;font-size:11px;">*Leaderboard online (Firebase) bisa diaktifkan lewat konfigurasi FIREBASE_CONFIG di script.</p>
+  </div>
+</div>
+
+<!-- ================= GAME HUB ================= -->
+<div class="screen" id="screenHub">
+  <div class="topbar"><span class="back">⟵ Menu</span><span>Mini Games</span></div>
+  <h2>🎮 Semua Mini Game</h2>
+  <div id="progressBar"><div id="progressFill"></div></div>
+  <div class="game-grid" id="gameGrid"></div>
+</div>
+
+<!-- ===== GAME 1 ===== -->
+<div class="screen" id="screenG1">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 1/25</span></div>
+  <div class="game-box">
+    <h2>🔢 Tebak Angka Favoritku</h2>
+    <p class="subtitle">Aku pilih angka antara 1-50. Tebak sampai bener!</p>
+    <div id="g1Num">?</div>
+    <input type="range" min="1" max="50" value="25" id="g1Range">
+    <div id="g1Hint">Geser lalu tekan Tebak</div>
+    <button class="btn" id="g1Guess">Tebak!</button>
+  </div>
+</div>
+
+<!-- ===== GAME 2 ===== -->
+<div class="screen" id="screenG2">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 2/25</span></div>
+  <div class="game-box">
+    <h2>🧠 Memory Match</h2>
+    <p class="subtitle">Cocokkan semua pasangan emoji cinta!</p>
+    <div class="memory-grid" id="memoryGrid"></div>
+  </div>
+</div>
+
+<!-- ===== GAME 3 ===== -->
+<div class="screen" id="screenG3">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 3/25</span></div>
+  <div class="game-box">
+    <h2>💗 Tangkap Hati</h2>
+    <p class="subtitle">Klik/tap hati sebelum jatuh! Kumpulkan 15 poin dalam 35 detik.</p>
+    <div id="catchScore">Skor: 0 | Waktu: 35</div>
+    <div id="catchArea"></div>
+    <button class="btn" id="g3Start">Mulai</button>
+  </div>
+</div>
+
+<!-- ===== GAME 4 ===== -->
+<div class="screen" id="screenG4">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 4/25</span></div>
+  <div class="game-box"><h2>❓ Kuis Cinta</h2><div id="quizWrap"></div></div>
+</div>
+
+<!-- ===== GAME 5 ===== -->
+<div class="screen" id="screenG5">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 5/25</span></div>
+  <div class="game-box">
+    <h2>🎈 Pecahkan Balon</h2>
+    <p class="subtitle">Pecahkan semua balon untuk mengungkap pesan rahasia!</p>
+    <div id="balloonMsg"></div>
+    <div id="balloonArea"></div>
+    <button class="btn" id="g5Start">Munculkan Balon</button>
+  </div>
+</div>
+
+<!-- ===== GAME 6 ===== -->
+<div class="screen" id="screenG6">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 6/25</span></div>
+  <div class="game-box">
+    <h2>🔤 Susun Kata Cinta</h2>
+    <p class="subtitle">Susun huruf acak ini jadi kata yang tepat!</p>
+    <div class="scramble-slot" id="scrambleAnswer"></div>
+    <div class="scramble-letters" id="scrambleLetters"></div>
+    <div id="scrambleHint"></div>
+    <button class="btn secondary" id="g6Reset">Acak Ulang</button>
+  </div>
+</div>
+
+<!-- ===== GAME 7 ===== -->
+<div class="screen" id="screenG7">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 7/25</span></div>
+  <div class="game-box">
+    <h2>🎨 Simon Warna Cinta</h2>
+    <p class="subtitle">Perhatikan urutan warna yang menyala, lalu ulangi. Selesaikan 5 ronde!</p>
+    <div id="simonRound">Ronde: 0/5</div>
+    <div class="simon-grid" id="simonGrid">
+      <div class="simon-pad" data-c="0" style="background:#ff6fa5"></div>
+      <div class="simon-pad" data-c="1" style="background:#a06bff"></div>
+      <div class="simon-pad" data-c="2" style="background:#ffd166"></div>
+      <div class="simon-pad" data-c="3" style="background:#78dc8c"></div>
+    </div>
+    <button class="btn" id="g7Start">Mulai</button>
+  </div>
+</div>
+
+<!-- ===== GAME 8 ===== -->
+<div class="screen" id="screenG8">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 8/25</span></div>
+  <div class="game-box">
+    <h2>⭕ Tic Tac Toe Cinta</h2>
+    <p class="subtitle">Kamu 💖 lawan Aku 💔. Menangkan satu kali ya!</p>
+    <div class="ttt-grid" id="tttGrid"></div>
+    <div id="tttStatus" style="margin-top:10px;font-weight:600;color:var(--gold);"></div>
+    <button class="btn secondary" id="g8Reset">Main Ulang</button>
+  </div>
+</div>
+
+<!-- ===== GAME 9 ===== -->
+<div class="screen" id="screenG9">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 9/25</span></div>
+  <div class="game-box">
+    <h2>🎯 Tepuk Hati</h2>
+    <p class="subtitle">Tepuk hati yang muncul secepat mungkin! Kumpulkan 12 poin dalam 30 detik.</p>
+    <div id="moleScore">Skor: 0 | Waktu: 30</div>
+    <div class="mole-grid" id="moleGrid"></div>
+    <button class="btn" id="g9Start">Mulai</button>
+  </div>
+</div>
+
+<!-- ===== GAME 10 ===== -->
+<div class="screen" id="screenG10">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 10/25</span></div>
+  <div class="game-box">
+    <h2>🎡 Roda Keberuntungan Cinta</h2>
+    <p class="subtitle">Putar rodanya dan lihat kejutan apa yang kamu dapat!</p>
+    <div class="wheel-wrap"><div class="wheel-pointer">▼</div><div class="wheel" id="wheel"></div></div>
+    <button class="btn" id="g10Spin">Putar!</button>
+    <div id="wheelResult"></div>
+  </div>
+</div>
+
+<!-- ===== GAME 11: Puzzle Foto ===== -->
+<div class="screen" id="screenG11">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 11/25</span></div>
+  <div class="game-box">
+    <h2>🧩 Puzzle Foto</h2>
+    <p class="subtitle">Geser kotak untuk menyusun angka 1-8 berurutan!</p>
+    <div id="puzzleMoves">Langkah: 0 | Rekor: -</div>
+    <div class="puzzle-grid" id="puzzleGrid"></div>
+    <div class="star-row" id="puzzleStars"></div>
+    <button class="btn secondary" id="g11Reset">Acak Ulang</button>
+  </div>
+</div>
+
+<!-- ===== GAME 12: Snake Love ===== -->
+<div class="screen" id="screenG12">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 12/25</span></div>
+  <div class="game-box">
+    <h2>🐍 Snake Love</h2>
+    <p class="subtitle">Gerakkan ular dengan tombol panah / swipe, makan hati sebanyak mungkin!</p>
+    <div class="canvas-score" id="snakeScore">Skor: 0 | Rekor: 0</div>
+    <div class="game-canvas-wrap"><canvas id="snakeCanvas" class="gameCanvas" width="300" height="300"></canvas></div>
+    <div class="star-row" id="snakeStars"></div>
+    <button class="btn canvas-overlay-btn" id="g12Start">Mulai</button>
+  </div>
+</div>
+
+<!-- ===== GAME 13: Flappy Heart ===== -->
+<div class="screen" id="screenG13">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 13/25</span></div>
+  <div class="game-box">
+    <h2>💘 Flappy Heart</h2>
+    <p class="subtitle">Tap / spasi untuk terbang, hindari rintangan lilin!</p>
+    <div class="canvas-score" id="flappyScore">Skor: 0 | Rekor: 0</div>
+    <div class="game-canvas-wrap"><canvas id="flappyCanvas" class="gameCanvas" width="300" height="340"></canvas></div>
+    <div class="star-row" id="flappyStars"></div>
+    <button class="btn canvas-overlay-btn" id="g13Start">Mulai</button>
+  </div>
+</div>
+
+<!-- ===== GAME 14: Match Color ===== -->
+<div class="screen" id="screenG14">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 14/25</span></div>
+  <div class="game-box">
+    <h2>🎯 Match Color</h2>
+    <p class="subtitle">Tap warna yang sama dengan kotak di atas, secepat mungkin!</p>
+    <div id="mcScore">Skor: 0 | Waktu: 20</div>
+    <div class="color-target" id="mcTarget"></div>
+    <div class="color-opts" id="mcOpts"></div>
+    <div class="star-row" id="mcStars"></div>
+    <button class="btn" id="g14Start">Mulai</button>
+  </div>
+</div>
+
+<!-- ===== GAME 15: Tebak Emoji ===== -->
+<div class="screen" id="screenG15">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 15/25</span></div>
+  <div class="game-box"><h2>🤔 Tebak Emoji</h2><div id="emojiWrap"></div><div class="star-row" id="emojiStars"></div></div>
+</div>
+
+<!-- ===== GAME 16: Bubble Pop ===== -->
+<div class="screen" id="screenG16">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 16/25</span></div>
+  <div class="game-box">
+    <h2>🫧 Bubble Pop</h2>
+    <p class="subtitle">Pop gelembung cinta, hindari gelembung bom!</p>
+    <div id="bubbleScore">Skor: 0 | Waktu: 25</div>
+    <div id="bubbleArea" style="position:relative;width:100%;height:340px;background:rgba(0,0,0,.2);border-radius:16px;overflow:hidden;"></div>
+    <div class="star-row" id="bubbleStars"></div>
+    <button class="btn" id="g16Start">Mulai</button>
+  </div>
+</div>
+
+<!-- ===== GAME 17: Maze Love ===== -->
+<div class="screen" id="screenG17">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 17/25</span></div>
+  <div class="game-box">
+    <h2>🧭 Maze Love</h2>
+    <p class="subtitle">Bawa 💗 menuju 🏁 lewat panah / swipe, hindari tembok!</p>
+    <div id="mazeMoves">Langkah: 0</div>
+    <div class="maze-grid" id="mazeGrid"></div>
+    <div class="star-row" id="mazeStars"></div>
+    <button class="btn secondary" id="g17Reset">Acak Ulang</button>
+  </div>
+</div>
+
+<!-- ===== GAME 18: Cari Perbedaan ===== -->
+<div class="screen" id="screenG18">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 18/25</span></div>
+  <div class="game-box">
+    <h2>🔍 Cari Perbedaan</h2>
+    <p class="subtitle">Ada beberapa kotak yang beda di sisi kanan. Temukan semua sebelum waktu habis!</p>
+    <div id="diffScore">Ditemukan: 0/4 | Waktu: 30</div>
+    <div class="diff-boards">
+      <div class="diff-grid" id="diffGridLeft"></div>
+      <div class="diff-grid" id="diffGridRight"></div>
+    </div>
+    <div class="star-row" id="diffStars"></div>
+    <button class="btn" id="g18Start">Mulai</button>
+  </div>
+</div>
+
+<!-- ===== GAME 19: Space Shooter Love ===== -->
+<div class="screen" id="screenG19">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 19/25</span></div>
+  <div class="game-box">
+    <h2>🚀 Space Shooter Love</h2>
+    <p class="subtitle">Geser kiri/kanan (panah/swipe), tap/spasi untuk tembak ciuman 💋!</p>
+    <div class="canvas-score" id="shooterScore">Skor: 0 | Rekor: 0</div>
+    <div class="game-canvas-wrap"><canvas id="shooterCanvas" class="gameCanvas" width="300" height="360"></canvas></div>
+    <div class="star-row" id="shooterStars"></div>
+    <button class="btn canvas-overlay-btn" id="g19Start">Mulai</button>
+  </div>
+</div>
+
+<!-- ===== GAME 20: Rhythm Game ===== -->
+<div class="screen" id="screenG20">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 20/25</span></div>
+  <div class="game-box">
+    <h2>🎶 Rhythm of Love</h2>
+    <p class="subtitle">Tap tombol saat not sampai di garis bawah!</p>
+    <div class="canvas-score" id="rhythmScore">Skor: 0 | Combo: 0</div>
+    <div class="game-canvas-wrap"><canvas id="rhythmCanvas" class="gameCanvas" width="300" height="360"></canvas></div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;">
+      <button class="btn small" data-lane="0">💖</button>
+      <button class="btn small" data-lane="1">💜</button>
+      <button class="btn small" data-lane="2">💛</button>
+      <button class="btn small" data-lane="3">💙</button>
+    </div>
+    <div class="star-row" id="rhythmStars"></div>
+    <button class="btn canvas-overlay-btn" id="g20Start">Mulai</button>
+  </div>
+</div>
+
+<!-- ===== GAME 21: Tangkap Hadiah ===== -->
+<div class="screen" id="screenG21">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 21/25</span></div>
+  <div class="game-box">
+    <h2>🧺 Tangkap Hadiah</h2>
+    <p class="subtitle">Gerakkan keranjang (panah/swipe/geser mouse), tangkap 🎁 hindari 💣!</p>
+    <div id="giftCatchScore">Skor: 0 | Waktu: 30</div>
+    <div id="giftCatchArea"><div id="giftBasket" style="left:50%;">🧺</div></div>
+    <div class="star-row" id="giftCatchStars"></div>
+    <button class="btn" id="g21Start">Mulai</button>
+  </div>
+</div>
+
+<!-- ===== GAME 22: Escape Room ===== -->
+<div class="screen" id="screenG22">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 22/25</span></div>
+  <div class="game-box">
+    <h2>🚪 Escape Room Cinta</h2>
+    <p class="subtitle">Pecahkan petunjuk untuk menemukan kode 4 digit dan buka pintunya!</p>
+    <div class="escape-clue" id="escapeClue"></div>
+    <input id="escapeCodeInput" maxlength="4" placeholder="••••" inputmode="numeric">
+    <br><button class="btn" id="escapeSubmit">Buka Pintu</button>
+    <div id="escapeMsg"></div>
+    <div class="star-row" id="escapeStars"></div>
+  </div>
+</div>
+
+<!-- ===== GAME 23: Memory Level Hard ===== -->
+<div class="screen" id="screenG23">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 23/25</span></div>
+  <div class="game-box">
+    <h2>🧠🔥 Memory Level Hard</h2>
+    <p class="subtitle">Versi sulit! 12 pasang kartu, waktu terbatas 90 detik.</p>
+    <div id="hardMemStatus">Waktu: 90</div>
+    <div class="memory-grid" id="hardMemoryGrid" style="grid-template-columns:repeat(6,1fr);"></div>
+    <div class="star-row" id="hardMemStars"></div>
+    <button class="btn secondary" id="g23Reset">Main Ulang</button>
+  </div>
+</div>
+
+<!-- ===== GAME 24: Fruit Slice Love ===== -->
+<div class="screen" id="screenG24">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 24/25</span></div>
+  <div class="game-box">
+    <h2>🍓 Fruit Slice Love</h2>
+    <p class="subtitle">Geser jari/mouse untuk mengiris buah cinta, hindari bom!</p>
+    <div class="canvas-score" id="sliceScore">Skor: 0 | Rekor: 0</div>
+    <div class="game-canvas-wrap"><canvas id="sliceCanvas" class="gameCanvas" width="300" height="360"></canvas></div>
+    <div class="star-row" id="sliceStars"></div>
+    <button class="btn canvas-overlay-btn" id="g24Start">Mulai</button>
+  </div>
+</div>
+
+<!-- ===== GAME 25: Parkour Mini ===== -->
+<div class="screen" id="screenG25">
+  <div class="topbar"><span class="back">⟵ Kembali</span><span>Game 25/25</span></div>
+  <div class="game-box">
+    <h2>🏃 Parkour Mini</h2>
+    <p class="subtitle">Tap / spasi untuk lompat, hindari rintangan selama mungkin!</p>
+    <div class="canvas-score" id="parkourScore">Skor: 0 | Rekor: 0</div>
+    <div class="game-canvas-wrap"><canvas id="parkourCanvas" class="gameCanvas" width="300" height="200"></canvas></div>
+    <div class="star-row" id="parkourStars"></div>
+    <button class="btn canvas-overlay-btn" id="g25Start">Mulai</button>
+  </div>
+</div>
+
+<!-- ================= FINAL ENDING ================= -->
+<div class="screen" id="screenFinal">
+  <div style="position:relative;">
+    <span class="sparkle" style="top:-10px;left:-30px;">✨</span>
+    <span class="sparkle" style="top:10px;right:-40px;animation-delay:.4s;">✨</span>
+    <span class="sparkle" style="bottom:0;left:-10px;animation-delay:.8s;">⭐</span>
+    <div class="cake" id="cakeEl">🎂<span class="candle-flame" id="candleFlame">🕯️</span></div>
+  </div>
+  <h1>Happy Birthday, Sayangku! 🎂💕</h1>
+  <p class="subtitle" id="blowHint">Tiup lilinnya lewat mic, atau tekan tombol di bawah 👇</p>
+  <button class="btn secondary" id="blowBtn">🎤 Tiup Lilin</button>
+  <div id="finalMsg" style="display:none;"></div>
+  <div class="certificate" id="certBox" style="display:none;">
+    <div class="cert-title">Sertifikat Penghargaan</div>
+    <p style="margin:10px 0;">diberikan kepada</p>
+    <p class="handwriting" style="font-size:26px;color:var(--pink);" id="certName">Sayangku</p>
+    <p style="margin-top:10px;">sebagai</p>
+    <p class="cert-title" style="font-size:22px;" id="certTitle">Best Girlfriend Ever</p>
+  </div>
+  <div id="countdownNext"></div>
+  <button class="btn secondary" id="btnReplay" style="margin-top:20px;">Main Lagi dari Awal</button>
+</div>
+
+<script>
+/* ============================================================================
+   KONFIGURASI — edit semua di sini
+============================================================================ */
+const NAME_A = "AKbar";
+const NAME_B = "Putri";
+const GAME1_SECRET = 14;
+const BALLOON_MESSAGE = "AKU SANGAT SAYANG KAMU";
+const WORD6 = "SAAYYAANNGG";
+const VIDEO_SRC = ""; // isi path/URL video ucapan kamu, contoh: "video/ucapan.mp4"
+const NEXT_BIRTHDAY = "2027-09-10T00:00:00"; // tanggal ulang tahun berikutnya
+const CERT_NAME = "Putri Ayu Setyo Wardhanj";
+const CERT_TITLE = "Best Girlfriend In The Word"; // atau "Best Boyfriend Ever"
+const SECRET_PASSWORD = "cinta"; // kode rahasia easter egg
+const ESCAPE_CODE = "1405"; // kode 4 digit untuk game Escape Room
+const ESCAPE_CLUE = "🔒 Kode terdiri dari 4 angka: tanggal & bulan hari jadian kita (format DDMM). Contoh: 10 September = 1009.";
+const FIREBASE_CONFIG = null; // isi objek config Firebase kamu untuk aktifkan leaderboard online (opsional)
+
+const STORY_CHAPTERS = [
+  { title:"Awal Kenalan", bg:"🌅", avatar:"🙂", lines:[
+      {speaker:NAME_A, text:"Masih ingat gak waktu pertama kali kita kenalan?"},
+      {speaker:NAME_A, text:"Aku masih inget banget kesan pertama ketemu kamu."},
+      {speaker:NAME_B, text:"Waktu itu canggung banget ya hehe."}
+  ]},
+  { title:"Mulai Dekat", bg:"🌤️", avatar:"😊", lines:[
+      {speaker:NAME_A, text:"Terus kita mulai sering chat, sering ngobrol."},
+      {speaker:NAME_A, text:"Rasanya waktu cepet banget kalau lagi sama kamu."}
+  ]},
+  { title:"Jadian", bg:"💞", avatar:"🥰", lines:[
+      {speaker:NAME_A, text:"Terus akhirnya kita resmi jadian."},
+      {speaker:NAME_B, text:"Hari itu jadi salah satu hari paling berkesan."}
+  ]},
+  { title:"Sekarang", bg:"🌸", avatar:"😍", lines:[
+      {speaker:NAME_A, text:"Sekarang kita udah lewatin banyak hal bareng."},
+      {speaker:NAME_A, text:"Makasih udah selalu ada, sayang."}
+  ]},
+  { title:"Masa Depan", bg:"✨", avatar:"🤗", lines:[
+      {speaker:NAME_A, text:"Semoga ke depannya kita bisa terus jalan bareng."},
+      {speaker:NAME_A, text:"Selamat ulang tahun, aku sayang kamu selalu."}
+  ]}
+];
+
+const TIMELINE_DATA = [
+  {date:"12 Mei 2023", title:"Pertama Kenalan", desc:"Awal mula kita saling tau satu sama lain di game gag, kita saat iru tukeran buah kmu ngasi aku jamur."},
+  {date:"12 Mei 2023", title:"Pertama kali aku nembak kamu", desc:"Saat itu kamu bilang besok kmu jawab tapi pas keluar game kmu manggil sayang."},
+  {date:"13 Feb 2023", title:"Pertama Chat Wa", desc:"Kita pas itu blum jadian tapi saat itu kita manggil sayang."},
+  {date:"14 Feb 2023", title:"Jadian", desc:"Hari paling bahagia, resmi jadi pasangan,Yeyyyyyyy🥳🥳."},
+  {date:"Hari ini", title:"Sekarang", desc:"Kita masi tetep bersama walau kadang saling marahan, tapi aku harap kita tetep bisa terus selamanyaa, amiiinn, oh iya lupain jihoon yaa."}
+];
+
+const GALLERY_PHOTOS = [
+  {emoji:"📸", caption:"Momen pertama kita", color:"linear-gradient(135deg,#ff6fa5,#a06bff)"},
+  {emoji:"🌇", caption:"Sunset favorit kita", color:"linear-gradient(135deg,#ffd166,#ff6fa5)"},
+  {emoji:"🎉", caption:"Rayain sesuatu bareng", color:"linear-gradient(135deg,#5fc8ff,#a06bff)"},
+  {emoji:"🍰", caption:"Ulang tahun tahun lalu", color:"linear-gradient(135deg,#78dc8c,#5fc8ff)"},
+  {emoji:"💑", caption:"Kita berdua", color:"linear-gradient(135deg,#a06bff,#ff6fa5)"}
+];
+
+const PLAYLIST = [
+  {title:"Happy Birthday (spesial)", artist:"Untukmu", src:"", isSynth:true, cover:"🎂"},
+  {title:"Lagu Favorit Kamu 1", artist:"Ganti dengan nama artis", src:"", cover:"🎵"},
+  {title:"Lagu Favorit Kamu 2", artist:"Ganti dengan nama artis", src:"", cover:"💿"}
+];
+
+const GIFT_LIST = [
+  "🎟️ Voucher Nonton Bareng", "🍽️ Traktir Makan Favorit", "🤗 1x Free Hug Sepanjang Hari",
+  "💆 Pijat Gratis 10 Menit", "🛍️ Nemenin Shopping", "🎬 Movie Night Pilihan Kamu"
+];
+
+const EMOJI_RIDDLES = [
+  {emoji:"🎂🎉💝", opts:["Ulang Tahun","Piknik","Sekolah","Kerja"], correct:0},
+  {emoji:"❤️➕❤️", opts:["Permusuhan","Cinta Berlipat","Matematika","Persahabatan"], correct:1},
+  {emoji:"🌙⭐😴", opts:["Pagi Hari","Malam & Mimpi Indah","Hujan","Liburan"], correct:1},
+  {emoji:"🍰🕯️😊", opts:["Kue Ulang Tahun","Masak Nasi","Pesta Kostum","Piknik"], correct:0}
+];
+
+const ACHIEVEMENTS = [
+  {id:"first_open", icon:"💌", title:"Amplop Terbuka", desc:"Membuka amplop pertama kali"},
+  {id:"first_win", icon:"🏅", title:"First Win", desc:"Menyelesaikan mini game pertama"},
+  {id:"perfect_memory", icon:"🧠", title:"Perfect Memory", desc:"Selesai Memory Match tanpa banyak kesalahan"},
+  {id:"fast_player", icon:"⚡", title:"Fast Player", desc:"Menyelesaikan game dengan cepat"},
+  {id:"balloon_master", icon:"🎈", title:"Balloon Master", desc:"Memecahkan semua balon"},
+  {id:"puzzle_king", icon:"🧩", title:"Puzzle King", desc:"Menyelesaikan Puzzle Foto"},
+  {id:"lucky_spin", icon:"🎡", title:"Lucky Spin", desc:"Memutar Roda Keberuntungan"},
+  {id:"birthday_hero", icon:"🦸", title:"Birthday Hero", desc:"Menyelesaikan semua mini game"},
+  {id:"true_love", icon:"💞", title:"True Love", desc:"Membaca surat sampai habis"},
+  {id:"snake_champ", icon:"🐍", title:"Snake Champ", desc:"Skor Snake Love di atas 10"},
+  {id:"flappy_pro", icon:"💘", title:"Flappy Pro", desc:"Skor Flappy Heart di atas 5"},
+  {id:"color_master", icon:"🎯", title:"Color Master", desc:"Skor Match Color di atas 10"},
+  {id:"emoji_genius", icon:"🤔", title:"Emoji Genius", desc:"Jawab semua tebak emoji benar"},
+  {id:"bubble_pro", icon:"🫧", title:"Bubble Pro", desc:"Skor Bubble Pop di atas 15"},
+  {id:"quiz_master", icon:"❓", title:"Quiz Master", desc:"Jawab semua kuis dengan benar"},
+  {id:"tictactoe_win", icon:"⭕", title:"Tic Tac Toe Win", desc:"Menang lawan komputer"},
+  {id:"simon_master", icon:"🎨", title:"Simon Master", desc:"Selesaikan 5 ronde Simon Warna"},
+  {id:"mole_hunter", icon:"🎯", title:"Mole Hunter", desc:"Skor Tepuk Hati di atas 12"},
+  {id:"scramble_solver", icon:"🔤", title:"Word Solver", desc:"Selesaikan Susun Kata"},
+  {id:"gift_opener", icon:"🎁", title:"Gift Opener", desc:"Membuka hadiah pertama"},
+  {id:"gift_collector", icon:"🎀", title:"Gift Collector", desc:"Membuka semua hadiah"},
+  {id:"music_lover", icon:"🎵", title:"Music Lover", desc:"Memutar musik di Music Player"},
+  {id:"gallery_explorer", icon:"📷", title:"Gallery Explorer", desc:"Melihat semua foto di galeri"},
+  {id:"story_reader", icon:"📖", title:"Story Reader", desc:"Menyelesaikan semua chapter cerita"},
+  {id:"timeline_viewer", icon:"📅", title:"Timeline Viewer", desc:"Membuka halaman timeline"},
+  {id:"guestbook_writer", icon:"✍️", title:"Guestbook Writer", desc:"Menulis pesan di guest book"},
+  {id:"sharer", icon:"📤", title:"Sharer", desc:"Membagikan website ini"},
+  {id:"night_owl", icon:"🦉", title:"Secret Finder", desc:"Menemukan easter egg rahasia"},
+  {id:"level_5", icon:"🌟", title:"Level 5", desc:"Mencapai Level 5"},
+  {id:"level_10", icon:"👑", title:"Level 10 - Birthday Legend", desc:"Mencapai Level 10"}
+];
+
+/* ============================================================================
+   STATE (in-memory; browser storage dinonaktifkan agar aman di preview Claude.
+   Kalau file ini didownload & dibuka langsung di browser, kamu bisa tambahkan
+   localStorage sendiri untuk membuat progres benar-benar tersimpan.)
+============================================================================ */
+const state = {
+  xp:0, level:1,
+  achievements:{}, // id -> true
+  gamesDone:{}, // 1..16 -> true
+  gameStars:{}, // 1..16 -> 1-3
+  highScores:{ snake:0, flappy:0, matchcolor:0, bubble:0, puzzleMoves:null },
+  giftsOpened:{},
+  galleryViewed:new Set(),
+  storyChaptersRead:new Set(),
+  likeCount:0,
+  guestbook:[],
+  logoClicks:0,
+  konamiIndex:0
+};
+
+// ===== PERSISTENSI DATA dengan localStorage =====
+function saveState() {
+  try {
+    const data = {
+      xp: state.xp,
+      level: state.level,
+      achievements: state.achievements,
+      gamesDone: state.gamesDone,
+      gameStars: state.gameStars,
+      highScores: state.highScores,
+      giftsOpened: state.giftsOpened,
+      galleryViewed: Array.from(state.galleryViewed),
+      storyChaptersRead: Array.from(state.storyChaptersRead),
+      likeCount: state.likeCount,
+      guestbook: state.guestbook,
+      logoClicks: state.logoClicks,
+      konamiIndex: state.konamiIndex
+    };
+    localStorage.setItem('birthdayState', JSON.stringify(data));
+  } catch(e) { /* ignore */ }
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem('birthdayState');
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    // Gabungkan data yang tersimpan ke state (tanpa mengubah struktur)
+    Object.keys(data).forEach(key => {
+      if (key === 'galleryViewed') {
+        state.galleryViewed = new Set(data[key]);
+      } else if (key === 'storyChaptersRead') {
+        state.storyChaptersRead = new Set(data[key]);
+      } else {
+        state[key] = data[key];
+      }
+    });
+    // Perbaiki beberapa tipe jika diperlukan
+    if (!state.highScores) state.highScores = { snake:0, flappy:0, matchcolor:0, bubble:0, puzzleMoves:null };
+    if (!state.giftsOpened) state.giftsOpened = {};
+    if (!state.guestbook) state.guestbook = [];
+    return true;
+  } catch(e) { return false; }
+}
+
+// Panggil loadState setelah state didefinisikan
+loadState();
+
+// Simpan otomatis setiap kali ada perubahan di fungsi-fungsi utama
+// Patch fungsi-fungsi agar memanggil saveState()
+const _origAddXP = addXP;
+addXP = function(amount) {
+  _origAddXP(amount);
+  saveState();
+};
+
+const _origUnlockAchievement = unlockAchievement;
+unlockAchievement = function(id) {
+  _origUnlockAchievement(id);
+  saveState();
+};
+
+const _origMarkGameDone = markGameDone;
+markGameDone = function(gameId, stars) {
+  _origMarkGameDone(gameId, stars);
+  saveState();
+};
+
+// Override untuk fungsi lain yang mengubah state
+const _origRenderGiftGrid = renderGiftGrid;
+renderGiftGrid = function() {
+  _origRenderGiftGrid();
+  saveState();
+};
+
+// Setiap kali ada penambahan guestbook atau like, simpan
+const _origGbSubmit = document.getElementById('gbSubmit').click;
+document.getElementById('gbSubmit').addEventListener('click', function(e) {
+  // Fungsi asli sudah ada, kita tambahkan saveState setelah submit
+  setTimeout(saveState, 100);
+});
+
+// Like
+const _origLikeBtn = document.getElementById('likeBtn').click;
+document.getElementById('likeBtn').addEventListener('click', function(e) {
+  setTimeout(saveState, 100);
+});
+
+// Simpan juga saat halaman ditutup
+window.addEventListener('beforeunload', saveState);
+
+// Panggil saveState setelah inisialisasi awal
+setTimeout(saveState, 200);
+
+/* ============================================================================
+   SCREEN NAVIGATION
+============================================================================ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='screenTimeline') unlockAchievement('timeline_viewer');
+  if(id==='screenHub') renderGameHub();
+}
+document.addEventListener('click', (e)=>{
+  const back = e.target.closest('.back');
+  if(back){
+    const currentScreen = e.target.closest('.screen');
+    const isGameScreen = currentScreen && /^screenG\d+$/.test(currentScreen.id);
+    showScreen(isGameScreen ? 'screenHub' : 'screenMenu');
+  }
+  const navCard = e.target.closest('[data-nav]');
+  if(navCard) showScreen(navCard.dataset.nav);
+});
+
+/* ============================================================================
+   TOAST NOTIFICATIONS
+============================================================================ */
+function showToast(text){
+  const wrap = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className='toast';
+  t.textContent = text;
+  wrap.appendChild(t);
+  setTimeout(()=>t.remove(), 3100);
+}
+
+/* ============================================================================
+   MASCOT
+============================================================================ */
+const MASCOT_TIPS = [
+  "Jangan lupa buka semua kejutannya ya! 💖",
+  "Coba mainkan mini game-nya, seru lho!",
+  "Musiknya bisa diganti sesuka kamu di pengaturan.",
+  "Ada easter egg rahasia lho di website ini 👀",
+  "Level naik terus kalau kamu aktif menjelajah!",
+  "Jangan lupa baca surat sampai habis ya 💌"
+];
+function mascotSay(text, duration){
+  const bubble = document.getElementById('mascotBubble');
+  bubble.textContent = text;
+  bubble.classList.add('show');
+  clearTimeout(mascotSay._t);
+  mascotSay._t = setTimeout(()=>bubble.classList.remove('show'), duration||2600);
+}
+document.getElementById('mascot').addEventListener('click', ()=>{
+  mascotSay(MASCOT_TIPS[Math.floor(Math.random()*MASCOT_TIPS.length)]);
+  vibrate(15);
+});
+
+/* ============================================================================
+   XP / LEVEL SYSTEM
+============================================================================ */
+function xpForLevel(lvl){ return lvl*100; }
+function addXP(amount){
+  state.xp += amount;
+  while(state.xp >= xpForLevel(state.level)){
+    state.xp -= xpForLevel(state.level);
+    state.level++;
+    showToast(`🎉 Naik ke Level ${state.level}!`);
+    mascotSay(`Selamat! Level ${state.level} tercapai! 🌟`, 3000);
+    launchConfetti(50);
+    if(state.level===5) unlockAchievement('level_5');
+    if(state.level===10) unlockAchievement('level_10');
+  }
+  renderXP();
+}
+function renderXP(){
+  const label = document.getElementById('xpLabel');
+  const fill = document.getElementById('xpFill');
+  if(!label) return;
+  label.textContent = `Level ${state.level} · ${state.xp}/${xpForLevel(state.level)} XP`;
+  fill.style.width = (state.xp/xpForLevel(state.level)*100)+'%';
+}
+
+/* ============================================================================
+   ACHIEVEMENTS
+============================================================================ */
+function unlockAchievement(id){
+  if(state.achievements[id]) return;
+  state.achievements[id] = true;
+  const ach = ACHIEVEMENTS.find(a=>a.id===id);
+  if(ach){
+    showToast(`🏆 Achievement: ${ach.title}`);
+    mascotSay(`Achievement baru: ${ach.title}! 🏆`, 3000);
+    addXP(20);
+  }
+  renderAchievements();
+}
+function renderAchievements(){
+  const grid = document.getElementById('achGrid');
+  if(!grid) return;
+  const unlockedCount = Object.keys(state.achievements).length;
+  document.getElementById('achSummary').textContent = `${unlockedCount}/${ACHIEVEMENTS.length} terbuka`;
+  grid.innerHTML = ACHIEVEMENTS.map(a=>{
+    const unlocked = !!state.achievements[a.id];
+    return `<div class="ach-card ${unlocked?'unlocked':''}">
+      <span class="aicon">${unlocked?a.icon:'🔒'}</span>
+      <div class="atitle">${unlocked?a.title:'???'}</div>
+      <div style="opacity:.7;margin-top:2px;">${unlocked?a.desc:'Belum terbuka'}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ============================================================================
+   BACKGROUND EFFECTS: floating hearts, petals, shooting stars, cursor trail
+============================================================================ */
+const bgHearts = document.getElementById('bgHearts');
+const heartEmojis = ['💖','💕','💗','💓','✨','🎈'];
+function spawnBgHeart(){
+  const h = document.createElement('div');
+  h.className='float-heart';
+  h.textContent = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+  h.style.left = Math.random()*100+'vw';
+  const dur = 8+Math.random()*10;
+  h.style.animationDuration = dur+'s';
+  h.style.fontSize = (16+Math.random()*20)+'px';
+  bgHearts.appendChild(h);
+  setTimeout(()=>h.remove(), dur*1000+500);
+}
+setInterval(spawnBgHeart, 600);
+
+let cursorTrailOn = false;
+document.addEventListener('pointermove', (e)=>{
+  if(!cursorTrailOn) return;
+  if(Math.random()>0.35) return;
+  const p = document.createElement('div');
+  p.className='cursor-particle';
+  const s = 5+Math.random()*6;
+  p.style.width=s+'px'; p.style.height=s+'px';
+  p.style.left=(e.clientX-s/2)+'px'; p.style.top=(e.clientY-s/2)+'px';
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(), 700);
+});
+
+function spawnPetals(container, count){
+  for(let i=0;i<count;i++){
+    setTimeout(()=>{
+      const p = document.createElement('div');
+      p.className='petal';
+      p.textContent = ['🌸','🌺','🌷','✨'][Math.floor(Math.random()*4)];
+      p.style.left = Math.random()*100+'%';
+      p.style.setProperty('--drift', (Math.random()*80-40)+'px');
+      p.style.animationDuration = (3+Math.random()*3)+'s';
+      container.appendChild(p);
+      setTimeout(()=>p.remove(), 6500);
+    }, i*120);
+  }
+}
+function spawnShootingStar(container){
+  const s = document.createElement('div');
+  s.className='shooting-star';
+  s.style.left = (40+Math.random()*40)+'%';
+  s.style.top = (5+Math.random()*20)+'%';
+  container.appendChild(s);
+  setTimeout(()=>s.remove(), 1700);
+}
+
+/* ============================================================================
+   CONFETTI + FIREWORKS (canvas)
+============================================================================ */
+const canvas = document.getElementById('confettiCanvas');
+const ctx = canvas.getContext('2d');
+function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+let confettiParticles = [];
+const CONFETTI_COLORS = ['#ff6fa5','#a06bff','#ffd166','#78dc8c','#5fc8ff'];
+function launchConfetti(count){
+  for(let i=0;i<count;i++){
+    confettiParticles.push({
+      type:'confetti', x: Math.random()*canvas.width, y: -20,
+      w: 6+Math.random()*6, h: 8+Math.random()*8,
+      color: CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)],
+      speedY: 2+Math.random()*3, speedX: -1.5+Math.random()*3,
+      rot: Math.random()*360, rotSpeed: -8+Math.random()*16, life: 0
+    });
+  }
+}
+function launchFireworks(bursts){
+  for(let b=0;b<bursts;b++){
+    setTimeout(()=>{
+      const cx = 60+Math.random()*(canvas.width-120);
+      const cy = 60+Math.random()*(canvas.height*0.5);
+      const color = CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)];
+      for(let i=0;i<40;i++){
+        const angle = (Math.PI*2*i)/40;
+        const speed = 2+Math.random()*3;
+        confettiParticles.push({
+          type:'spark', x:cx, y:cy, color,
+          speedX:Math.cos(angle)*speed, speedY:Math.sin(angle)*speed,
+          life:0, maxLife:50, w:3,h:3
+        });
+      }
+    }, b*350);
+  }
+}
+function animateConfetti(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  confettiParticles.forEach(p=>{
+    p.x += p.speedX; p.y += p.speedY; p.life++;
+    if(p.type==='confetti'){
+      p.rot += p.rotSpeed;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle=p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+    } else if(p.type==='spark'){
+      p.speedY += 0.05;
+      ctx.globalAlpha = Math.max(0, 1-p.life/p.maxLife);
+      ctx.fillStyle=p.color;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.w,0,Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  });
+  confettiParticles = confettiParticles.filter(p=>{
+    if(p.type==='spark') return p.life < p.maxLife;
+    return p.y < canvas.height+30 && p.life < 500;
+  });
+  requestAnimationFrame(animateConfetti);
+}
+animateConfetti();
+
+/* ============================================================================
+   VIBRATION HELPER
+============================================================================ */
+function vibrate(ms){ if(navigator.vibrate) navigator.vibrate(ms); }
+
+/* ============================================================================
+   THEME + FULLSCREEN TOGGLES
+============================================================================ */
+document.getElementById('themeToggle').addEventListener('click', ()=>{
+  const isLight = document.documentElement.getAttribute('data-theme')==='light';
+  document.documentElement.setAttribute('data-theme', isLight?'':'light');
+  document.getElementById('themeToggle').textContent = isLight?'🌙':'☀️';
+  vibrate(10);
+});
+document.getElementById('fullscreenToggle').addEventListener('click', ()=>{
+  if(!document.fullscreenElement){ document.documentElement.requestFullscreen?.().catch(()=>{}); }
+  else { document.exitFullscreen?.(); }
+  vibrate(10);
+});
+
+/* ============================================================================
+   BACKGROUND MUSIC (Web Audio synth "Happy Birthday", tetap ada dari versi awal)
+============================================================================ */
+let audioCtx=null, musicOn=false, musicTimeoutId=null, melodyIndex=0;
+const noteFreq = { C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392.00,A4:440.00,B4:493.88,C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99 };
+const beatSec = 0.42;
+const melody = [
+  ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['C5',1],['B4',2],
+  ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['D5',1],['C5',2],
+  ['G4',0.75],['G4',0.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+  ['F5',0.75],['F5',0.25],['E5',1],['C5',1],['D5',1],['C5',2]
+];
+function ensureAudio(){ if(!audioCtx){ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } if(audioCtx.state==='suspended'){ audioCtx.resume(); } }
+function playNote(freq,durSec){
+  const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+  osc.type='triangle'; osc.frequency.value=freq;
+  gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.22, audioCtx.currentTime+0.03);
+  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+durSec);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(); osc.stop(audioCtx.currentTime+durSec+0.02);
+}
+function playMelodyStep(){
+  if(!musicOn) return;
+  const pair = melody[melodyIndex];
+  const dur = pair[1]*beatSec;
+  playNote(noteFreq[pair[0]], dur*0.9);
+  melodyIndex = (melodyIndex+1) % melody.length;
+  musicTimeoutId = setTimeout(playMelodyStep, dur*1000);
+}
+function startBgMusic(){
+  ensureAudio(); musicOn=true; melodyIndex=0;
+  document.getElementById('musicToggle').textContent='🔊';
+  clearTimeout(musicTimeoutId);
+  playMelodyStep();
+}
+function stopBgMusic(){ musicOn=false; clearTimeout(musicTimeoutId); document.getElementById('musicToggle').textContent='🔇'; }
+document.getElementById('musicToggle').addEventListener('click', ()=>{ if(musicOn) stopBgMusic(); else startBgMusic(); });
+
+/* ============================================================================
+   LOADING SCREEN -> CINEMATIC INTRO
+============================================================================ */
+window.addEventListener('load', ()=>{
+  setTimeout(()=>{
+    document.getElementById('loadingScreen').style.display='none';
+    startCinematic();
+  }, 1600);
+});
+
+/* ============================================================================
+   CINEMATIC INTRO SEQUENCE
+============================================================================ */
+function startCinematic(){
+  const layer = document.getElementById('cineLayer');
+  for(let i=0;i<3;i++){
+    const ray = document.createElement('div');
+    ray.className='lightray';
+    ray.style.animationDelay=(i*1.2)+'s';
+    layer.appendChild(ray);
+  }
+  spawnPetals(layer, 14);
+  const starInterval = setInterval(()=>spawnShootingStar(layer), 1400);
+
+  setTimeout(()=>{
+    document.getElementById('cineLogoWrap').style.display='none';
+    const cd = document.getElementById('cineCountdown');
+    cd.style.display='block';
+    let n=3;
+    cd.textContent=n;
+    const cdInterval = setInterval(()=>{
+      n--;
+      if(n>0){ cd.textContent=n; }
+      else if(n===0){ cd.textContent='🎉'; }
+      else {
+        clearInterval(cdInterval);
+        cd.style.display='none';
+        showNames();
+      }
+    }, 800);
+  }, 1800);
+
+  function showNames(){
+    const namesEl = document.getElementById('cineNames');
+    namesEl.style.display='block';
+    const text = NAME_A+' 💕 '+NAME_B;
+    namesEl.innerHTML = text.split('').map((c,i)=>`<span style="animation-delay:${i*0.05}s">${c===' '?'&nbsp;':c}</span>`).join('');
+    setTimeout(()=>{
+      document.getElementById('cineTapHint').style.display='block';
+    }, text.length*50+400);
+  }
+
+  document.getElementById('screenCinematic').addEventListener('click', function goNext(){
+    if(document.getElementById('cineTapHint').style.display==='block'){
+      clearInterval(starInterval);
+      this.removeEventListener('click', goNext);
+      showScreen('screenIntro');
+    }
+  });
+}
+
+/* ============================================================================
+   ENVELOPE (existing feature) -> now leads to Main Menu
+============================================================================ */
+const envelope = document.getElementById('envelopeWrap');
+envelope.addEventListener('click', ()=>{
+  envelope.classList.add('open');
+  document.getElementById('tapHint').textContent = '💌';
+  launchConfetti(60);
+  startBgMusic();
+  cursorTrailOn = true;
+  unlockAchievement('first_open');
+  addXP(10);
+  setTimeout(()=>{ showScreen('screenMenu'); renderXP(); }, 900);
+});
+
+/* ============================================================================
+   EASTER EGGS: Konami code, logo clicks, secret password
+============================================================================ */
+const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+document.addEventListener('keydown', (e)=>{
+  if(e.key === KONAMI[state.konamiIndex]){
+    state.konamiIndex++;
+    if(state.konamiIndex === KONAMI.length){
+      state.konamiIndex = 0;
+      openSecretModal("🎮 Kode Konami ditemukan! Kamu memang true gamer 😄");
+      unlockAchievement('night_owl');
+    }
+  } else {
+    state.konamiIndex = 0;
+  }
+});
+document.querySelector('.cine-logo').addEventListener('click', ()=>{
+  state.logoClicks++;
+  if(state.logoClicks>=10){
+    state.logoClicks=0;
+    openSecretModal("🌟 Kamu menemukan mode rahasia dengan klik logo 10x!");
+    unlockAchievement('night_owl');
+  }
+});
+function openSecretModal(text){
+  document.getElementById('secretModalText').textContent = text;
+  document.getElementById('secretModal').classList.add('show');
+}
+document.getElementById('secretClose').addEventListener('click', ()=>document.getElementById('secretModal').classList.remove('show'));
+document.getElementById('secretSubmit').addEventListener('click', ()=>{
+  const val = document.getElementById('secretInput').value.trim().toLowerCase();
+  if(val === SECRET_PASSWORD.toLowerCase()){
+    openSecretModal("🔓 Password benar! Ini pesan rahasia: kamu adalah orang paling spesial dalam hidupku. 💖");
+    unlockAchievement('night_owl');
+    launchConfetti(80);
+  } else {
+    document.getElementById('secretModalText').textContent = "Password salah, coba lagi ya 🤔";
+  }
+});
+
+/* ============================================================================
+   STORY / VISUAL NOVEL
+============================================================================ */
+let vnChapter=0, vnLine=0;
+function initStory(){
+  vnChapter=0; vnLine=0;
+  renderChapterDots();
+  renderVNLine();
+}
+function renderChapterDots(){
+  const dots = document.getElementById('chapterDots');
+  dots.innerHTML = STORY_CHAPTERS.map((c,i)=>`<span class="${i===vnChapter?'active':''}"></span>`).join('');
+}
+function renderVNLine(){
+  const chapter = STORY_CHAPTERS[vnChapter];
+  const line = chapter.lines[vnLine];
+  document.getElementById('vnBg').textContent = chapter.bg;
+  document.getElementById('vnAvatar').textContent = chapter.avatar;
+  document.getElementById('vnSpeaker').textContent = line.speaker + ' · Chapter ' + (vnChapter+1) + ': ' + chapter.title;
+  document.getElementById('vnText').textContent = '';
+  typewriterInto(document.getElementById('vnText'), line.text, 22);
+  renderChapterDots();
+}
+function typewriterInto(el, text, speed){
+  let i=0;
+  clearInterval(typewriterInto._int);
+  typewriterInto._int = setInterval(()=>{
+    el.textContent += text[i];
+    i++;
+    if(i>=text.length) clearInterval(typewriterInto._int);
+  }, speed);
+}
+document.getElementById('vnNext').addEventListener('click', advanceVN);
+document.getElementById('vnStage').addEventListener('click', advanceVN);
+function advanceVN(){
+  const chapter = STORY_CHAPTERS[vnChapter];
+  vnLine++;
+  if(vnLine >= chapter.lines.length){
+    state.storyChaptersRead.add(vnChapter);
+    vnChapter++; vnLine=0;
+    if(vnChapter >= STORY_CHAPTERS.length){
+      if(state.storyChaptersRead.size >= STORY_CHAPTERS.length){
+        unlockAchievement('story_reader'); addXP(30);
+      }
+      showToast('📖 Cerita selesai! Terima kasih sudah membaca 💕');
+      showScreen('screenMenu');
+      return;
+    }
+  }
+  renderVNLine();
+}
+
+/* ============================================================================
+   TIMELINE
+============================================================================ */
+function renderTimeline(){
+  const list = document.getElementById('timelineList');
+  list.innerHTML = TIMELINE_DATA.map(t=>`
+    <div class="tl-item">
+      <div class="tl-date">📅 ${t.date}</div>
+      <div class="tl-title">${t.title}</div>
+      <div class="tl-desc">${t.desc}</div>
+    </div>`).join('');
+}
+
+/* ============================================================================
+   GALLERY
+============================================================================ */
+let galleryIndex=0;
+function renderGallery(){
+  const stage = document.getElementById('galleryStage');
+  stage.innerHTML='';
+  GALLERY_PHOTOS.forEach((p,i)=>{
+    const card = document.createElement('div');
+    card.className='polaroid';
+    const offset = i-galleryIndex;
+    card.style.transform = `translateX(${offset*20}px) rotate(${offset*4}deg) scale(${1-Math.abs(offset)*0.08})`;
+    card.style.opacity = Math.abs(offset)>2 ? 0 : 1;
+    card.style.zIndex = 10-Math.abs(offset);
+    card.innerHTML = `<div class="photo-area" style="background:${p.color}">${p.emoji}</div><div class="caption">${p.caption}</div>`;
+    stage.appendChild(card);
+  });
+  state.galleryViewed.add(galleryIndex);
+  if(state.galleryViewed.size >= GALLERY_PHOTOS.length){ unlockAchievement('gallery_explorer'); }
+}
+document.getElementById('galleryPrev').addEventListener('click', ()=>{ galleryIndex=(galleryIndex-1+GALLERY_PHOTOS.length)%GALLERY_PHOTOS.length; renderGallery(); });
+document.getElementById('galleryNext').addEventListener('click', ()=>{ galleryIndex=(galleryIndex+1)%GALLERY_PHOTOS.length; renderGallery(); });
+document.getElementById('galleryZoom').addEventListener('click', ()=>{
+  const p = GALLERY_PHOTOS[galleryIndex];
+  const fp = document.getElementById('galleryFullPhoto');
+  fp.style.background = p.color;
+  fp.textContent = p.emoji;
+  fp.style.fontSize='100px';
+  fp.style.display='flex'; fp.style.alignItems='center'; fp.style.justifyContent='center';
+  document.getElementById('galleryFullscreen').classList.add('show');
+});
+document.getElementById('galleryFullscreen').addEventListener('click', ()=>document.getElementById('galleryFullscreen').classList.remove('show'));
+let galleryTouchStartX=0;
+document.getElementById('galleryStage').addEventListener('touchstart', e=>galleryTouchStartX=e.touches[0].clientX);
+document.getElementById('galleryStage').addEventListener('touchend', e=>{
+  const dx = e.changedTouches[0].clientX - galleryTouchStartX;
+  if(dx>40) document.getElementById('galleryPrev').click();
+  else if(dx<-40) document.getElementById('galleryNext').click();
+});
+
+/* ============================================================================
+   VIDEO
+============================================================================ */
+function initVideo(){
+  const video = document.getElementById('birthdayVideo');
+  if(VIDEO_SRC){ video.src = VIDEO_SRC; }
+  const overlay = document.getElementById('videoPlayOverlay');
+  overlay.classList.remove('hidden');
+  overlay.onclick = ()=>{
+    if(!VIDEO_SRC){ showToast('Isi VIDEO_SRC di konfigurasi script untuk menambahkan video kamu 🎥'); return; }
+    video.play(); overlay.classList.add('hidden');
+  };
+  video.onclick = ()=>{ if(video.paused){video.play(); overlay.classList.add('hidden');} else {video.pause(); overlay.classList.remove('hidden');} };
+}
+
+/* ============================================================================
+   MUSIC PLAYER (full featured, terpisah dari musik latar)
+============================================================================ */
+let playerAudio = new Audio();
+let playerIndex = 0, playerShuffle=false, playerRepeat=false, playerSynthPlaying=false;
+function renderPlaylistUI(){
+  const box = document.getElementById('playlistBox');
+  box.innerHTML = PLAYLIST.map((t,i)=>`<div class="playlist-item ${i===playerIndex?'current':''}" data-i="${i}"><span>${t.cover} ${t.title}</span><span>${t.artist}</span></div>`).join('');
+  box.querySelectorAll('.playlist-item').forEach(el=>{
+    el.addEventListener('click', ()=>{ playerIndex = parseInt(el.dataset.i); loadTrack(); playTrack(); });
+  });
+}
+function loadTrack(){
+  const t = PLAYLIST[playerIndex];
+  document.getElementById('trackTitle').textContent = t.title;
+  document.getElementById('trackArtist').textContent = t.artist;
+  document.getElementById('coverArt').textContent = t.cover;
+  renderPlaylistUI();
+  if(!t.isSynth && t.src){ playerAudio.src = t.src; }
+}
+function playTrack(){
+  const t = PLAYLIST[playerIndex];
+  document.getElementById('coverArt').classList.add('playing');
+  document.getElementById('playPauseBtn').textContent='⏸️';
+  unlockAchievement('music_lover');
+  if(t.isSynth){
+    playerSynthPlaying = true;
+    startBgMusic();
+  } else if(t.src){
+    playerAudio.play().catch(()=>showToast('Isi PLAYLIST src di konfigurasi untuk memutar lagu kamu 🎵'));
+  } else {
+    showToast('Track ini belum ada file lagunya — isi "src" di konfigurasi PLAYLIST.');
+    pauseTrack();
+  }
+}
+function pauseTrack(){
+  document.getElementById('coverArt').classList.remove('playing');
+  document.getElementById('playPauseBtn').textContent='▶️';
+  if(playerSynthPlaying){ stopBgMusic(); playerSynthPlaying=false; }
+  playerAudio.pause();
+}
+document.getElementById('playPauseBtn').addEventListener('click', ()=>{
+  const playing = document.getElementById('coverArt').classList.contains('playing');
+  playing ? pauseTrack() : playTrack();
+});
+document.getElementById('nextBtn').addEventListener('click', ()=>{ stepTrack(1); });
+document.getElementById('prevBtn').addEventListener('click', ()=>{ stepTrack(-1); });
+function stepTrack(dir){
+  pauseTrack();
+  if(playerShuffle){ playerIndex = Math.floor(Math.random()*PLAYLIST.length); }
+  else { playerIndex = (playerIndex+dir+PLAYLIST.length)%PLAYLIST.length; }
+  loadTrack(); playTrack();
+}
+document.getElementById('shuffleBtn').addEventListener('click', function(){ playerShuffle=!playerShuffle; this.classList.toggle('active-toggle', playerShuffle); });
+document.getElementById('repeatBtn').addEventListener('click', function(){ playerRepeat=!playerRepeat; this.classList.toggle('active-toggle', playerRepeat); });
+document.getElementById('volumeSlider').addEventListener('input', function(){ playerAudio.volume = this.value/100; });
+playerAudio.addEventListener('timeupdate', ()=>{
+  if(!playerAudio.duration) return;
+  document.getElementById('musicProgFill').style.width = (playerAudio.currentTime/playerAudio.duration*100)+'%';
+  document.getElementById('curTime').textContent = fmtTime(playerAudio.currentTime);
+  document.getElementById('durTime').textContent = fmtTime(playerAudio.duration);
+});
+playerAudio.addEventListener('ended', ()=>{ if(playerRepeat) playTrack(); else stepTrack(1); });
+document.getElementById('musicProgBar').addEventListener('click', function(e){
+  if(!playerAudio.duration) return;
+  const rect = this.getBoundingClientRect();
+  playerAudio.currentTime = ((e.clientX-rect.left)/rect.width)*playerAudio.duration;
+});
+function fmtTime(s){ if(isNaN(s)) return '0:00'; const m=Math.floor(s/60); const sec=Math.floor(s%60); return m+':'+(sec<10?'0':'')+sec; }
+function initMusicPlayer(){ loadTrack(); }
+
+/* ============================================================================
+   GIFT BOX
+============================================================================ */
+function renderGiftGrid(){
+  const grid = document.getElementById('giftGrid');
+  grid.innerHTML = GIFT_LIST.map((g,i)=>`<div class="gift-box ${state.giftsOpened[i]?'opened':''}" data-i="${i}">${state.giftsOpened[i]?'📭':'🎁'}</div>`).join('');
+  grid.querySelectorAll('.gift-box').forEach(box=>{
+    box.addEventListener('click', ()=>{
+      const i = parseInt(box.dataset.i);
+      if(state.giftsOpened[i]) return;
+      state.giftsOpened[i]=true;
+      box.classList.add('opened'); box.textContent='📭';
+      document.getElementById('giftReveal').textContent = '🎉 ' + GIFT_LIST[i];
+      launchConfetti(50);
+      vibrate(20);
+      if(Object.keys(state.giftsOpened).length===1){ unlockAchievement('gift_opener'); addXP(15); }
+      if(Object.keys(state.giftsOpened).length===GIFT_LIST.length){ unlockAchievement('gift_collector'); addXP(30); }
+    });
+  });
+}
+
+/* ============================================================================
+   LETTER
+============================================================================ */
+const LETTER_TEXT = `Sayangku,
+
+Aku nulis surat ini buat ngucapin selamat ulang tahun, tapi juga buat bilang beberapa hal yang mungkin jarang aku ucapin langsung.
+
+Terima kasih sudah selalu sabar sama aku, sudah selalu ada di saat susah maupun senang. Kamu itu salah satu alasan aku semangat menjalani hari-hari.
+
+Di umur yang baru ini, aku doain kamu makin sehat, makin bahagia, makin sukses di segala hal yang kamu kejar. Aku juga berharap kita bisa terus tumbuh bareng, saling dukung, dan saling jaga.
+
+Aku sayang kamu, hari ini, besok, dan seterusnya.
+
+Selamat ulang tahun, cintaku. 💖
+
+— dari orang yang paling sayang sama kamu —`;
+function initLetter(){
+  const paper = document.getElementById('letterPaper');
+  paper.textContent='';
+  let i=0;
+  clearInterval(initLetter._int);
+  initLetter._int = setInterval(()=>{
+    paper.textContent += LETTER_TEXT[i];
+    paper.scrollTop = paper.scrollHeight;
+    i++;
+    if(i>=LETTER_TEXT.length){
+      clearInterval(initLetter._int);
+      unlockAchievement('true_love'); addXP(20);
+    }
+  }, 18);
+}
+document.getElementById('letterSkip').addEventListener('click', ()=>{
+  clearInterval(initLetter._int);
+  document.getElementById('letterPaper').textContent = LETTER_TEXT;
+  unlockAchievement('true_love');
+});
+
+/* ============================================================================
+   SOCIAL: guest book, likes, share, leaderboard
+============================================================================ */
+function renderGuestbook(){
+  document.getElementById('gbList').innerHTML = state.guestbook.map(g=>`<div class="gb-entry"><b>${g.name}</b>: ${g.msg}</div>`).join('') || '<p class="subtitle">Belum ada ucapan. Jadi yang pertama!</p>';
+}
+document.getElementById('gbSubmit').addEventListener('click', ()=>{
+  const name = document.getElementById('gbName').value.trim() || 'Anonim';
+  const msg = document.getElementById('gbMsg').value.trim();
+  if(!msg) return;
+  state.guestbook.push({name, msg});
+  document.getElementById('gbMsg').value='';
+  renderGuestbook();
+  unlockAchievement('guestbook_writer');
+  addXP(10);
+});
+document.getElementById('likeBtn').addEventListener('click', ()=>{
+  state.likeCount++;
+  document.getElementById('likeCount').textContent = state.likeCount;
+  vibrate(10);
+});
+function shareLink(url){
+  if(navigator.share){ navigator.share({title:'Happy Birthday!', url}).catch(()=>{}); }
+  else { window.open(url, '_blank'); }
+  unlockAchievement('sharer');
+}
+document.getElementById('shareWA').addEventListener('click', ()=>shareLink('https://wa.me/?text=' + encodeURIComponent('Lihat kejutan ulang tahun ini!')));
+document.getElementById('shareFB').addEventListener('click', ()=>shareLink('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href)));
+document.getElementById('shareIG').addEventListener('click', ()=>{ showToast('Screenshot halaman ini & bagikan ke Instagram Story kamu 📸'); unlockAchievement('sharer'); });
+document.getElementById('shareTT').addEventListener('click', ()=>{ showToast('Rekam layar & bagikan ke TikTok kamu 🎬'); unlockAchievement('sharer'); });
+function renderLeaderboard(){
+  const rows = [
+    {name:'Snake Love', score: state.highScores.snake},
+    {name:'Flappy Heart', score: state.highScores.flappy},
+    {name:'Match Color', score: state.highScores.matchcolor},
+    {name:'Bubble Pop', score: state.highScores.bubble}
+  ].sort((a,b)=>b.score-a.score);
+  document.getElementById('lbList').innerHTML = rows.map(r=>`<div class="lb-row"><span>${r.name}</span><span>${r.score}</span></div>`).join('');
+}
+/* Contoh integrasi Firebase (opsional, isi FIREBASE_CONFIG di atas untuk aktifkan):
+   1. Tambahkan library Firebase App (script tag firebase-app-compat.js dari gstatic.com) dan library lain yang dibutuhkan.
+   2. firebase.initializeApp(FIREBASE_CONFIG);
+   3. Simpan skor ke Firestore/Realtime Database di fungsi submitScoreOnline().
+   Bagian ini sengaja tidak diaktifkan otomatis karena butuh project Firebase milikmu sendiri. */
+
+/* ============================================================================
+   GAME HUB (16 mini games + 9 "coming soon")
+============================================================================ */
+const GAME_LIST = [
+  {id:1, icon:'🔢', name:'Tebak Angka'},
+  {id:2, icon:'🧠', name:'Memory Match'},
+  {id:3, icon:'💗', name:'Tangkap Hati'},
+  {id:4, icon:'❓', name:'Kuis Cinta'},
+  {id:5, icon:'🎈', name:'Pecahkan Balon'},
+  {id:6, icon:'🔤', name:'Susun Kata'},
+  {id:7, icon:'🎨', name:'Simon Warna'},
+  {id:8, icon:'⭕', name:'Tic Tac Toe'},
+  {id:9, icon:'🎯', name:'Tepuk Hati'},
+  {id:10, icon:'🎡', name:'Roda Cinta'},
+  {id:11, icon:'🧩', name:'Puzzle Foto'},
+  {id:12, icon:'🐍', name:'Snake Love'},
+  {id:13, icon:'💘', name:'Flappy Heart'},
+  {id:14, icon:'🎯', name:'Match Color'},
+  {id:15, icon:'🤔', name:'Tebak Emoji'},
+  {id:16, icon:'🫧', name:'Bubble Pop'},
+  {id:17, icon:'🧭', name:'Maze Love'},
+  {id:18, icon:'🔍', name:'Cari Perbedaan'},
+  {id:19, icon:'🚀', name:'Space Shooter'},
+  {id:20, icon:'🎶', name:'Rhythm Love'},
+  {id:21, icon:'🧺', name:'Tangkap Hadiah'},
+  {id:22, icon:'🚪', name:'Escape Room'},
+  {id:23, icon:'🧠', name:'Memory Hard'},
+  {id:24, icon:'🍓', name:'Fruit Slice'},
+  {id:25, icon:'🏃', name:'Parkour Mini'}
+];
+const COMING_SOON_GAMES = [];
+function renderGameHub(){
+  const grid = document.getElementById('gameGrid');
+  const done = GAME_LIST.filter(g=>state.gamesDone[g.id]).length;
+  document.getElementById('progressFill').style.width = (done/GAME_LIST.length*100)+'%';
+  let html = GAME_LIST.map(g=>{
+    const isDone = state.gamesDone[g.id];
+    const stars = state.gameStars[g.id]||0;
+    return `<div class="game-card ${isDone?'done':''}" data-game="${g.id}">
+      <span class="status">${isDone?'✅':'🔓'}</span>
+      <span class="icon">${g.icon}</span>${g.name}
+      ${stars?`<div class="stars-mini">${'⭐'.repeat(stars)}</div>`:''}
+    </div>`;
+  }).join('');
+  html += COMING_SOON_GAMES.map(name=>`<div class="game-card soon"><span class="icon">🔜</span>${name}<div class="stars-mini">Segera Hadir</div></div>`).join('');
+  grid.innerHTML = html;
+  grid.querySelectorAll('.game-card[data-game]').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      const g = card.dataset.game;
+      showScreen('screenG'+g);
+      const initFns = {2:initMemory,4:initQuiz,6:initScramble,8:initTTT,10:initWheel,11:initPuzzle,12:initSnake,13:initFlappy,14:initMatchColor,15:initEmoji,16:initBubble,
+        17:initMaze,18:initDiffGame,19:initShooter,20:initRhythm,21:initGiftCatch,22:initEscape,23:initHardMemory,24:initSlice,25:initParkour};
+      if(initFns[g]) initFns[g]();
+    });
+  });
+}
+function markGameDone(gameId, stars){
+  const first = Object.keys(state.gamesDone).length===0;
+  state.gamesDone[gameId]=true;
+  if(stars) state.gameStars[gameId]=stars;
+  addXP(25);
+  if(first) unlockAchievement('first_win');
+  renderGameHub();
+  renderLeaderboard();
+  if(Object.keys(state.gamesDone).length === GAME_LIST.length){
+    unlockAchievement('birthday_hero');
+    document.getElementById('menuFinalCard').style.outline='2px solid var(--gold)';
+    showToast('🎉 Semua mini game selesai! Kejutan akhir sudah terbuka.');
+  }
+}
+function starsRow(n){ return '⭐'.repeat(n) + '<span class="dim">'+'⭐'.repeat(3-n)+'</span>'; }
+
+/* ============================================================================
+   GAME 1: Tebak Angka
+============================================================================ */
+const g1Range = document.getElementById('g1Range');
+const g1Num = document.getElementById('g1Num');
+const g1Hint = document.getElementById('g1Hint');
+let g1Tries=0;
+g1Range.addEventListener('input', ()=> g1Num.textContent = g1Range.value);
+document.getElementById('g1Guess').addEventListener('click', ()=>{
+  const val = parseInt(g1Range.value);
+  g1Tries++;
+  if(val === GAME1_SECRET){
+    g1Hint.textContent = '🎉 Bener banget! Kamu hebat!';
+    g1Hint.style.color = '#78dc8c';
+    launchConfetti(80);
+    const stars = g1Tries<=3?3:g1Tries<=6?2:1;
+    markGameDone(1, stars);
+    setTimeout(()=>showScreen('screenHub'), 1800);
+  } else if(val < GAME1_SECRET){
+    g1Hint.textContent = 'Naikkan lagi! ⬆️'; g1Hint.style.color = '#ffd166';
+  } else {
+    g1Hint.textContent = 'Turunkan lagi! ⬇️'; g1Hint.style.color = '#ffd166';
+  }
+});
+
+/* ============================================================================
+   GAME 2: Memory Match
+============================================================================ */
+let memFirst=null, memLock=false, memMatched=0, memMisses=0;
+function initMemory(){
+  const grid = document.getElementById('memoryGrid');
+  grid.innerHTML=''; memFirst=null; memLock=false; memMatched=0; memMisses=0;
+  const icons = ['💖','🎂','🎈','🌹','💍','🍫','🎁','⭐'];
+  let deck = [...icons, ...icons];
+  deck.sort(()=>Math.random()-0.5);
+  deck.forEach((icon)=>{
+    const card = document.createElement('div');
+    card.className='card'; card.dataset.icon=icon; card.textContent='❔';
+    card.addEventListener('click', ()=>flipCard(card));
+    grid.appendChild(card);
+  });
+}
+function flipCard(card){
+  if(memLock || card.classList.contains('flip') || card.classList.contains('matched')) return;
+  card.classList.add('flip'); card.textContent = card.dataset.icon;
+  if(!memFirst){ memFirst = card; }
+  else {
+    memLock = true;
+    if(memFirst.dataset.icon === card.dataset.icon){
+      memFirst.classList.add('matched'); card.classList.add('matched'); memMatched++;
+      memFirst=null; memLock=false;
+      if(memMatched===8){
+        const stars = memMisses<=8?3:memMisses<=12?2:1;
+        if(memMisses<=8) unlockAchievement('perfect_memory');
+        setTimeout(()=>{ launchConfetti(80); markGameDone(2, stars); showScreen('screenHub'); }, 700);
+      }
+    } else {
+      memMisses++;
+      setTimeout(()=>{
+        card.classList.remove('flip'); card.textContent='❔';
+        memFirst.classList.remove('flip'); memFirst.textContent='❔';
+        memFirst=null; memLock=false;
+      }, 900);
+    }
+  }
+}
+
+/* ============================================================================
+   GAME 3: Tangkap Hati
+============================================================================ */
+let catchScore=0, catchTime=35, catchInterval=null, catchSpawner=null;
+document.getElementById('g3Start').addEventListener('click', startCatchGame);
+function startCatchGame(){
+  const area = document.getElementById('catchArea');
+  area.innerHTML=''; catchScore=0; catchTime=35;
+  document.getElementById('catchScore').textContent = `Skor: ${catchScore} | Waktu: ${catchTime}`;
+  document.getElementById('g3Start').disabled = true;
+  clearInterval(catchInterval); clearInterval(catchSpawner);
+  catchSpawner = setInterval(()=>{
+    const item = document.createElement('div');
+    item.className='falling';
+    item.textContent = Math.random()<0.85 ? '💖' : '💣';
+    item.style.left = Math.random()*88+'%';
+    item.style.animationDuration = (2.4+Math.random()*1.8)+'s';
+    area.appendChild(item);
+    item.addEventListener('click', ()=>{
+      if(item.textContent==='💖'){ catchScore++; } else { catchScore = Math.max(0,catchScore-2); }
+      document.getElementById('catchScore').textContent = `Skor: ${catchScore} | Waktu: ${catchTime}`;
+      item.remove();
+    });
+    item.addEventListener('animationend', ()=>item.remove());
+  }, 750);
+  catchInterval = setInterval(()=>{
+    catchTime--;
+    document.getElementById('catchScore').textContent = `Skor: ${catchScore} | Waktu: ${catchTime}`;
+    if(catchTime<=0){
+      clearInterval(catchInterval); clearInterval(catchSpawner);
+      area.innerHTML=''; document.getElementById('g3Start').disabled = false;
+      if(catchScore>=15){
+        const stars = catchScore>=25?3:catchScore>=18?2:1;
+        document.getElementById('catchScore').textContent = `🎉 Skor akhir: ${catchScore} - Berhasil!`;
+        launchConfetti(80); markGameDone(3, stars);
+        setTimeout(()=>showScreen('screenHub'), 1800);
+      } else {
+        document.getElementById('catchScore').textContent = `Skor akhir: ${catchScore} - Coba lagi ya!`;
+      }
+    }
+  }, 1000);
+}
+
+/* ============================================================================
+   GAME 4: Kuis Cinta
+============================================================================ */
+const quizData = [
+  {q:"Warna favoritku apa?", opts:["Pink","Biru","Hitam","Hijau"], correct:1},
+  {q:"Makanan yang paling aku suka?", opts:["Bakso","Sushi","Pizza","Sate"], correct:2},
+  {q:"Kapan pertama kali kita ketemu?", opts:["Di sekolah","Lewat teman","Media sosial","Di Game"], correct:3},
+];
+let quizIndex=0, quizScore=0;
+function initQuiz(){ quizIndex=0; quizScore=0; renderQuiz(); }
+function renderQuiz(){
+  const wrap = document.getElementById('quizWrap');
+  if(quizIndex >= quizData.length){
+    wrap.innerHTML = `<p class="quiz-q">Kamu jawab benar ${quizScore}/${quizData.length}! Yang penting kita saling belajar terus ya 💞</p><button class="btn" id="quizDone">Lanjut</button>`;
+    document.getElementById('quizDone').addEventListener('click', ()=>{
+      if(quizScore===quizData.length) unlockAchievement('quiz_master');
+      const stars = quizScore===quizData.length?3:quizScore>=1?2:1;
+      launchConfetti(80); markGameDone(4, stars); showScreen('screenHub');
+    });
+    return;
+  }
+  const item = quizData[quizIndex];
+  wrap.innerHTML = `<p class="quiz-q">${quizIndex+1}. ${item.q}</p>` + item.opts.map((o,i)=>`<button class="quiz-opt" data-i="${i}">${o}</button>`).join('');
+  wrap.querySelectorAll('.quiz-opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i = parseInt(btn.dataset.i);
+      wrap.querySelectorAll('.quiz-opt').forEach(b=>b.style.pointerEvents='none');
+      if(i===item.correct){ btn.classList.add('correct'); quizScore++; }
+      else { btn.classList.add('wrong'); wrap.children[item.correct+1].classList.add('correct'); }
+      setTimeout(()=>{ quizIndex++; renderQuiz(); }, 1400);
+    });
+  });
+}
+
+/* ============================================================================
+   GAME 5: Pecahkan Balon
+============================================================================ */
+let balloonsTotal=0, balloonsPopped=0;
+const balloonColors = ['#ff6fa5','#a06bff','#ffd166','#78dc8c','#5fc8ff'];
+document.getElementById('g5Start').addEventListener('click', startBalloons);
+function startBalloons(){
+  const area = document.getElementById('balloonArea');
+  area.innerHTML='';
+  document.getElementById('balloonMsg').innerHTML = BALLOON_MESSAGE.split('').map(c=>c===' '?'&nbsp;&nbsp;':'<span class="bletter" style="opacity:.15">'+c+'</span>').join('');
+  document.getElementById('g5Start').disabled = true;
+  const letters = BALLOON_MESSAGE.replace(/ /g,'').split('');
+  balloonsTotal = letters.length; balloonsPopped = 0;
+  letters.forEach((ch, idx)=>{
+    setTimeout(()=>{
+      const b = document.createElement('div');
+      b.className='balloon';
+      b.style.background = balloonColors[idx % balloonColors.length];
+      b.style.left = (5+Math.random()*80)+'%';
+      b.style.animationDuration = (7+Math.random()*4)+'s';
+      b.dataset.letter = ch; b.dataset.idx = idx;
+      area.appendChild(b);
+      b.addEventListener('click', ()=>popBalloon(b));
+      b.addEventListener('animationend', ()=>b.remove());
+    }, idx*500);
+  });
+}
+function popBalloon(b){
+  if(!b.parentNode) return;
+  const idx = b.dataset.idx; b.remove(); balloonsPopped++;
+  const spans = document.querySelectorAll('#balloonMsg .bletter');
+  const target = BALLOON_MESSAGE.replace(/ /g,'').split('')[idx];
+  for(const span of spans){
+    if(span.textContent===target && span.style.opacity==='0.15'){
+      span.style.opacity='1'; span.style.color = 'var(--gold)'; span.style.textShadow = '0 0 10px var(--pink)';
+      break;
+    }
+  }
+  launchConfetti(15); vibrate(10);
+  if(balloonsPopped >= balloonsTotal){
+    document.getElementById('g5Start').disabled = false;
+    unlockAchievement('balloon_master');
+    setTimeout(()=>{ launchConfetti(90); markGameDone(5, 3); showScreen('screenHub'); }, 1200);
+  }
+}
+
+/* ============================================================================
+   GAME 6: Susun Kata
+============================================================================ */
+let scrambleTiles=[], scrambleAnswer=[];
+function shuffleArray(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+function initScramble(){
+  document.getElementById('scrambleHint').textContent='';
+  const lettersArr = shuffleArray(WORD6.split(''));
+  scrambleTiles = lettersArr.map((c,i)=>({char:c, id:i, used:false}));
+  scrambleAnswer = [];
+  renderScramble();
+}
+function renderScramble(){
+  const lettersDiv = document.getElementById('scrambleLetters');
+  const answerDiv = document.getElementById('scrambleAnswer');
+  lettersDiv.innerHTML = scrambleTiles.map(t=>`<button class="letter-tile" data-id="${t.id}" style="${t.used?'visibility:hidden':''}">${t.char}</button>`).join('');
+  answerDiv.innerHTML = scrambleAnswer.length ? scrambleAnswer.map(id=>{
+    const t = scrambleTiles.find(x=>x.id===id);
+    return `<button class="letter-tile filled" data-id="${id}">${t.char}</button>`;
+  }).join('') : '<span style="opacity:.4;align-self:center;">Klik huruf di bawah...</span>';
+  lettersDiv.querySelectorAll('.letter-tile').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = parseInt(btn.dataset.id);
+      const tile = scrambleTiles.find(t=>t.id===id);
+      tile.used = true; scrambleAnswer.push(id);
+      renderScramble(); checkScramble();
+    });
+  });
+  answerDiv.querySelectorAll('.letter-tile').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = parseInt(btn.dataset.id);
+      scrambleAnswer = scrambleAnswer.filter(x=>x!==id);
+      scrambleTiles.find(t=>t.id===id).used=false;
+      renderScramble();
+    });
+  });
+}
+function checkScramble(){
+  if(scrambleAnswer.length === scrambleTiles.length){
+    const word = scrambleAnswer.map(id=>scrambleTiles.find(t=>t.id===id).char).join('');
+    if(word === WORD6){
+      document.getElementById('scrambleHint').textContent = '🎉 Benar!';
+      unlockAchievement('scramble_solver');
+      setTimeout(()=>{ launchConfetti(80); markGameDone(6, 3); showScreen('screenHub'); }, 900);
+    } else {
+      document.getElementById('scrambleHint').textContent = 'Belum tepat, coba lagi ya!';
+      setTimeout(initScramble, 1100);
+    }
+  }
+}
+document.getElementById('g6Reset').addEventListener('click', initScramble);
+
+/* ============================================================================
+   GAME 7: Simon Warna
+============================================================================ */
+let simonSeq=[], simonPlayerStep=0, simonRound=0, simonTarget=5, simonBusy=false;
+document.getElementById('g7Start').addEventListener('click', startSimon);
+function startSimon(){ simonSeq=[]; simonRound=0; document.getElementById('g7Start').disabled=true; nextSimonRound(); }
+function nextSimonRound(){
+  simonRound++;
+  document.getElementById('simonRound').textContent = `Ronde: ${simonRound}/${simonTarget}`;
+  simonSeq.push(Math.floor(Math.random()*4));
+  simonPlayerStep=0; playSimonSequence();
+}
+function playSimonSequence(){
+  simonBusy=true; let i=0;
+  const pads = document.querySelectorAll('.simon-pad');
+  const interval = setInterval(()=>{
+    pads.forEach(p=>p.classList.remove('active'));
+    if(i < simonSeq.length){
+      const c = simonSeq[i]; pads[c].classList.add('active');
+      setTimeout(()=>pads[c].classList.remove('active'), 450); i++;
+    } else { clearInterval(interval); simonBusy=false; }
+  }, 800);
+}
+document.querySelectorAll('.simon-pad').forEach(pad=>{
+  pad.addEventListener('click', ()=>{
+    if(simonBusy) return;
+    const c = parseInt(pad.dataset.c);
+    pad.classList.add('active'); setTimeout(()=>pad.classList.remove('active'),200);
+    if(c === simonSeq[simonPlayerStep]){
+      simonPlayerStep++;
+      if(simonPlayerStep === simonSeq.length){
+        if(simonRound >= simonTarget){
+          unlockAchievement('simon_master');
+          setTimeout(()=>{ launchConfetti(80); markGameDone(7, 3); document.getElementById('g7Start').disabled=false; showScreen('screenHub'); }, 700);
+        } else { setTimeout(nextSimonRound, 1000); }
+      }
+    } else {
+      document.getElementById('simonRound').textContent = 'Salah urutan! Coba lagi dari awal.';
+      document.getElementById('g7Start').disabled=false; simonSeq=[]; simonRound=0;
+    }
+  });
+});
+
+/* ============================================================================
+   GAME 8: Tic Tac Toe
+============================================================================ */
+let tttBoard=Array(9).fill(null), tttOver=false;
+function initTTT(){ tttBoard = Array(9).fill(null); tttOver=false; document.getElementById('tttStatus').textContent='Giliranmu!'; renderTTT(); }
+function renderTTT(){
+  const grid = document.getElementById('tttGrid');
+  grid.innerHTML = tttBoard.map((v,i)=>`<div class="ttt-cell" data-i="${i}">${v==='P'?'💖':v==='C'?'💔':''}</div>`).join('');
+  grid.querySelectorAll('.ttt-cell').forEach(cell=>cell.addEventListener('click', ()=>tttPlayerMove(parseInt(cell.dataset.i))));
+}
+function tttPlayerMove(i){
+  if(tttOver || tttBoard[i]) return;
+  tttBoard[i]='P'; renderTTT();
+  if(checkTTTWin('P')){ endTTT('Kamu menang! 🎉', true); return; }
+  if(tttBoard.every(c=>c)){ endTTT('Seri! Coba lagi yuk', false); return; }
+  document.getElementById('tttStatus').textContent='Giliranku...';
+  setTimeout(tttComputerMove, 700);
+}
+function tttComputerMove(){
+  const empty = tttBoard.map((v,i)=>v?null:i).filter(v=>v!==null);
+  const move = empty[Math.floor(Math.random()*empty.length)];
+  tttBoard[move]='C'; renderTTT();
+  if(checkTTTWin('C')){ endTTT('Aku menang kali ini 😜 coba lagi!', false); return; }
+  if(tttBoard.every(c=>c)){ endTTT('Seri! Coba lagi yuk', false); return; }
+  document.getElementById('tttStatus').textContent='Giliranmu!';
+}
+function checkTTTWin(p){
+  const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  return lines.some(line=>line.every(i=>tttBoard[i]===p));
+}
+function endTTT(msg, won){
+  tttOver=true; document.getElementById('tttStatus').textContent = msg;
+  if(won){ unlockAchievement('tictactoe_win'); launchConfetti(80); markGameDone(8, 3); setTimeout(()=>showScreen('screenHub'), 1600); }
+}
+document.getElementById('g8Reset').addEventListener('click', initTTT);
+
+/* ============================================================================
+   GAME 9: Tepuk Hati
+============================================================================ */
+let moleScore=0, moleTime=30, moleInterval=null, moleSpawner=null;
+document.getElementById('g9Start').addEventListener('click', startMole);
+function initMoleGrid(){
+  const grid = document.getElementById('moleGrid'); grid.innerHTML='';
+  for(let i=0;i<9;i++){
+    const hole = document.createElement('div');
+    hole.className='mole-hole'; hole.dataset.i=i;
+    hole.addEventListener('click', ()=>{
+      if(hole.classList.contains('up')){
+        moleScore++; hole.classList.remove('up'); hole.textContent='';
+        document.getElementById('moleScore').textContent = `Skor: ${moleScore} | Waktu: ${moleTime}`;
+      }
+    });
+    grid.appendChild(hole);
+  }
+}
+function startMole(){
+  initMoleGrid(); moleScore=0; moleTime=30;
+  document.getElementById('moleScore').textContent = `Skor: ${moleScore} | Waktu: ${moleTime}`;
+  document.getElementById('g9Start').disabled=true;
+  clearInterval(moleInterval); clearInterval(moleSpawner);
+  moleSpawner = setInterval(()=>{
+    const holes = document.querySelectorAll('.mole-hole');
+    holes.forEach(h=>{h.classList.remove('up'); h.textContent='';});
+    const idx = Math.floor(Math.random()*9);
+    holes[idx].classList.add('up'); holes[idx].textContent='💗';
+    setTimeout(()=>{ holes[idx].classList.remove('up'); holes[idx].textContent=''; }, 850);
+  }, 1050);
+  moleInterval = setInterval(()=>{
+    moleTime--;
+    document.getElementById('moleScore').textContent = `Skor: ${moleScore} | Waktu: ${moleTime}`;
+    if(moleTime<=0){
+      clearInterval(moleInterval); clearInterval(moleSpawner);
+      document.querySelectorAll('.mole-hole').forEach(h=>{h.classList.remove('up'); h.textContent='';});
+      document.getElementById('g9Start').disabled=false;
+      if(moleScore>=12){
+        const stars = moleScore>=20?3:moleScore>=15?2:1;
+        document.getElementById('moleScore').textContent = `🎉 Skor akhir: ${moleScore} - Mantap!`;
+        unlockAchievement('mole_hunter');
+        launchConfetti(80); markGameDone(9, stars);
+        setTimeout(()=>showScreen('screenHub'), 1800);
+      } else {
+        document.getElementById('moleScore').textContent = `Skor akhir: ${moleScore} - Coba lagi ya!`;
+      }
+    }
+  }, 1000);
+}
+
+/* ============================================================================
+   GAME 10: Roda Keberuntungan
+============================================================================ */
+const wheelSegments = ["1 Pelukan Hangat 🤗","ku temenin main 1harian","Traktir Makan Favorit 🍽️","Movie Night Bareng 🎬","nurutin kmj 10 Menit ","Kejutan Spesial Rahasia 🎁"];
+const wheelColors = ['#ff6fa5','#a06bff','#ffd166','#78dc8c','#5fc8ff','#ff8f6b'];
+let wheelRotation=0;
+function initWheel(){
+  const wheel = document.getElementById('wheel');
+  const segAngle = 360/wheelSegments.length;
+  let gradient = 'conic-gradient(';
+  wheelSegments.forEach((s,i)=>{ gradient += wheelColors[i]+' '+(i*segAngle)+'deg '+((i+1)*segAngle)+'deg'+(i<wheelSegments.length-1?', ':')'); });
+  wheel.style.background = gradient; wheel.style.transform = 'rotate(0deg)'; wheelRotation = 0;
+  document.getElementById('wheelResult').textContent=''; document.getElementById('g10Spin').disabled=false;
+}
+document.getElementById('g10Spin').addEventListener('click', ()=>{
+  document.getElementById('g10Spin').disabled=true;
+  const segAngle = 360/wheelSegments.length;
+  wheelRotation += 5*360 + Math.random()*360;
+  document.getElementById('wheel').style.transform = `rotate(${wheelRotation}deg)`;
+  setTimeout(()=>{
+    const normalized = (360 - (wheelRotation % 360)) % 360;
+    const idx = Math.floor(normalized / segAngle);
+    document.getElementById('wheelResult').textContent = '🎉 ' + wheelSegments[idx];
+    unlockAchievement('lucky_spin');
+    launchConfetti(80); markGameDone(10, 3);
+    setTimeout(()=>showScreen('screenHub'), 2200);
+  }, 4300);
+});
+
+/* ============================================================================
+   GAME 11: Puzzle Foto (8-puzzle sliding)
+============================================================================ */
+let puzzleTiles=[], puzzleMoves=0, puzzleEmptyIdx=8;
+function initPuzzle(){
+  puzzleMoves=0;
+  let arr = [1,2,3,4,5,6,7,8,null];
+  do { arr = shuffleArray(arr.slice()); } while(!isPuzzleSolvable(arr) || isPuzzleSolved(arr));
+  puzzleTiles = arr;
+  puzzleEmptyIdx = puzzleTiles.indexOf(null);
+  updatePuzzleUI();
+}
+function isPuzzleSolved(arr){ for(let i=0;i<8;i++){ if(arr[i]!==i+1) return false; } return true; }
+function isPuzzleSolvable(arr){
+  const nums = arr.filter(n=>n!==null);
+  let inv=0;
+  for(let i=0;i<nums.length;i++) for(let j=i+1;j<nums.length;j++) if(nums[i]>nums[j]) inv++;
+  return inv%2===0;
+}
+function updatePuzzleUI(){
+  const rec = state.highScores.puzzleMoves;
+  document.getElementById('puzzleMoves').textContent = `Langkah: ${puzzleMoves} | Rekor: ${rec===null?'-':rec}`;
+  const grid = document.getElementById('puzzleGrid');
+  grid.innerHTML = puzzleTiles.map((v,i)=>`<div class="puzzle-tile ${v===null?'empty':''}" data-i="${i}">${v||''}</div>`).join('');
+  grid.querySelectorAll('.puzzle-tile').forEach(t=>t.addEventListener('click', ()=>movePuzzleTile(parseInt(t.dataset.i))));
+}
+function movePuzzleTile(i){
+  const row1=Math.floor(i/3), col1=i%3, row2=Math.floor(puzzleEmptyIdx/3), col2=puzzleEmptyIdx%3;
+  const adjacent = (Math.abs(row1-row2)+Math.abs(col1-col2))===1;
+  if(!adjacent) return;
+  [puzzleTiles[i], puzzleTiles[puzzleEmptyIdx]] = [puzzleTiles[puzzleEmptyIdx], puzzleTiles[i]];
+  puzzleEmptyIdx = i; puzzleMoves++;
+  updatePuzzleUI();
+  if(isPuzzleSolved(puzzleTiles)){
+    if(state.highScores.puzzleMoves===null || puzzleMoves<state.highScores.puzzleMoves) state.highScores.puzzleMoves = puzzleMoves;
+    const stars = puzzleMoves<=35?3:puzzleMoves<=45?2:1;
+    document.getElementById('puzzleStars').innerHTML = starsRow(stars);
+    unlockAchievement('puzzle_king');
+    launchConfetti(80); vibrate(30);
+    markGameDone(11, stars);
+    setTimeout(()=>showScreen('screenHub'), 1800);
+  }
+}
+document.getElementById('g11Reset').addEventListener('click', initPuzzle);
+
+/* ============================================================================
+   GAME 12: Snake Love (canvas)
+============================================================================ */
+const snakeCanvas = document.getElementById('snakeCanvas');
+const snakeCtx = snakeCanvas.getContext('2d');
+const SNAKE_GRID = 15, SNAKE_CELL = 300/SNAKE_GRID;
+let snake, snakeDir, snakeFood, snakeScore, snakeLoop, snakeRunning=false;
+function initSnake(){
+  snake = [{x:7,y:7},{x:6,y:7},{x:5,y:7}];
+  snakeDir = {x:1,y:0}; snakeScore=0; snakeRunning=false;
+  placeSnakeFood();
+  drawSnake();
+  document.getElementById('snakeScore').textContent = `Skor: 0 | Rekor: ${state.highScores.snake}`;
+  document.getElementById('snakeStars').innerHTML='';
+}
+function placeSnakeFood(){ snakeFood = {x:Math.floor(Math.random()*SNAKE_GRID), y:Math.floor(Math.random()*SNAKE_GRID)}; }
+function drawSnake(){
+  snakeCtx.clearRect(0,0,300,300);
+  snakeCtx.fillStyle='#ff6fa5';
+  snake.forEach((s,i)=>{ snakeCtx.globalAlpha = i===0?1:0.75; snakeCtx.fillRect(s.x*SNAKE_CELL+1, s.y*SNAKE_CELL+1, SNAKE_CELL-2, SNAKE_CELL-2); });
+  snakeCtx.globalAlpha=1;
+  snakeCtx.font=(SNAKE_CELL-2)+'px sans-serif';
+  snakeCtx.fillText('💗', snakeFood.x*SNAKE_CELL, snakeFood.y*SNAKE_CELL+SNAKE_CELL-2);
+}
+function snakeStep(){
+  const head = {x:snake[0].x+snakeDir.x, y:snake[0].y+snakeDir.y};
+  if(head.x<0||head.y<0||head.x>=SNAKE_GRID||head.y>=SNAKE_GRID || snake.some(s=>s.x===head.x&&s.y===head.y)){
+    endSnake(); return;
+  }
+  snake.unshift(head);
+  if(head.x===snakeFood.x && head.y===snakeFood.y){ snakeScore++; placeSnakeFood(); vibrate(10); }
+  else { snake.pop(); }
+  document.getElementById('snakeScore').textContent = `Skor: ${snakeScore} | Rekor: ${state.highScores.snake}`;
+  drawSnake();
+}
+function endSnake(){
+  clearInterval(snakeLoop); snakeRunning=false;
+  if(snakeScore>state.highScores.snake) state.highScores.snake = snakeScore;
+  const stars = snakeScore>=15?3:snakeScore>=8?2:snakeScore>=3?1:0;
+  if(snakeScore>10) unlockAchievement('snake_champ');
+  document.getElementById('snakeStars').innerHTML = starsRow(Math.max(stars,1));
+  document.getElementById('g12Start').disabled=false; document.getElementById('g12Start').textContent='Main Lagi';
+  if(stars>0){ launchConfetti(50); markGameDone(12, stars); }
+}
+document.getElementById('g12Start').addEventListener('click', ()=>{
+  initSnake(); snakeRunning=true;
+  document.getElementById('g12Start').disabled=true;
+  clearInterval(snakeLoop);
+  snakeLoop = setInterval(snakeStep, 220);
+});
+document.addEventListener('keydown', e=>{
+  if(!snakeRunning) return;
+  if(e.key==='ArrowUp' && snakeDir.y!==1) snakeDir={x:0,y:-1};
+  if(e.key==='ArrowDown' && snakeDir.y!==-1) snakeDir={x:0,y:1};
+  if(e.key==='ArrowLeft' && snakeDir.x!==1) snakeDir={x:-1,y:0};
+  if(e.key==='ArrowRight' && snakeDir.x!==-1) snakeDir={x:1,y:0};
+});
+let snakeTouchStart=null;
+snakeCanvas.addEventListener('touchstart', e=>{ snakeTouchStart={x:e.touches[0].clientX,y:e.touches[0].clientY}; });
+snakeCanvas.addEventListener('touchend', e=>{
+  if(!snakeTouchStart || !snakeRunning) return;
+  const dx = e.changedTouches[0].clientX - snakeTouchStart.x;
+  const dy = e.changedTouches[0].clientY - snakeTouchStart.y;
+  if(Math.abs(dx)>Math.abs(dy)){ if(dx>0 && snakeDir.x!==-1) snakeDir={x:1,y:0}; else if(dx<0 && snakeDir.x!==1) snakeDir={x:-1,y:0}; }
+  else { if(dy>0 && snakeDir.y!==-1) snakeDir={x:0,y:1}; else if(dy<0 && snakeDir.y!==1) snakeDir={x:0,y:-1}; }
+});
+
+/* ============================================================================
+   GAME 13: Flappy Heart (canvas)
+============================================================================ */
+const flappyCanvas = document.getElementById('flappyCanvas');
+const flappyCtx = flappyCanvas.getContext('2d');
+let flappyBird, flappyPipes, flappyScore, flappyLoop, flappyRunning=false, flappyFrame=0;
+function initFlappy(){
+  flappyBird = {x:60,y:150,vy:0};
+  flappyPipes = []; flappyScore=0; flappyFrame=0; flappyRunning=false;
+  drawFlappy();
+  document.getElementById('flappyScore').textContent = `Skor: 0 | Rekor: ${state.highScores.flappy}`;
+  document.getElementById('flappyStars').innerHTML='';
+}
+function drawFlappy(){
+  flappyCtx.clearRect(0,0,300,340);
+  flappyCtx.fillStyle='rgba(255,255,255,.05)';
+  flappyCtx.fillRect(0,0,300,340);
+  flappyCtx.font='30px sans-serif';
+  flappyCtx.fillText('💘', flappyBird.x-15, flappyBird.y+10);
+  flappyCtx.fillStyle='#78dc8c';
+  flappyPipes.forEach(p=>{
+    flappyCtx.fillRect(p.x, 0, 34, p.gapY-60);
+    flappyCtx.fillRect(p.x, p.gapY+60, 34, 340-(p.gapY+60));
+  });
+}
+function flappyStep(){
+  flappyFrame++;
+  flappyBird.vy += 0.35; flappyBird.y += flappyBird.vy;
+  if(flappyFrame%95===0){ flappyPipes.push({x:300, gapY:80+Math.random()*160, passed:false}); }
+  flappyPipes.forEach(p=>p.x -= 2.2);
+  flappyPipes = flappyPipes.filter(p=>p.x>-40);
+  flappyPipes.forEach(p=>{
+    if(!p.passed && p.x+34 < flappyBird.x){ p.passed=true; flappyScore++; }
+    const hitX = flappyBird.x+12 > p.x && flappyBird.x-12 < p.x+34;
+    const hitY = flappyBird.y-12 < p.gapY-60 || flappyBird.y+12 > p.gapY+60;
+    if(hitX && hitY){ endFlappy(); }
+  });
+  if(flappyBird.y>340 || flappyBird.y<0){ endFlappy(); }
+  document.getElementById('flappyScore').textContent = `Skor: ${flappyScore} | Rekor: ${state.highScores.flappy}`;
+  drawFlappy();
+}
+function flap(){ if(flappyRunning) flappyBird.vy = -6; }
+flappyCanvas.addEventListener('mousedown', flap);
+flappyCanvas.addEventListener('touchstart', e=>{ e.preventDefault(); flap(); });
+document.addEventListener('keydown', e=>{ if(e.code==='Space' && flappyRunning) flap(); });
+function endFlappy(){
+  clearInterval(flappyLoop); flappyRunning=false;
+  if(flappyScore>state.highScores.flappy) state.highScores.flappy = flappyScore;
+  const stars = flappyScore>=8?3:flappyScore>=4?2:flappyScore>=1?1:0;
+  if(flappyScore>5) unlockAchievement('flappy_pro');
+  document.getElementById('flappyStars').innerHTML = starsRow(Math.max(stars,1));
+  document.getElementById('g13Start').disabled=false; document.getElementById('g13Start').textContent='Main Lagi';
+  if(stars>0){ launchConfetti(50); markGameDone(13, stars); }
+}
+document.getElementById('g13Start').addEventListener('click', ()=>{
+  initFlappy(); flappyRunning=true;
+  document.getElementById('g13Start').disabled=true;
+  clearInterval(flappyLoop);
+  flappyLoop = setInterval(flappyStep, 30);
+});
+
+/* ============================================================================
+   GAME 14: Match Color
+============================================================================ */
+const MC_COLORS = ['#ff6fa5','#a06bff','#ffd166','#78dc8c','#5fc8ff','#ff8f6b'];
+let mcScore=0, mcTime=20, mcInterval=null, mcTarget=null;
+function initMatchColor(){
+  mcScore=0; mcTime=20;
+  clearInterval(mcInterval);
+  document.getElementById('mcScore').textContent = `Skor: 0 | Waktu: ${mcTime}`;
+  document.getElementById('mcTarget').style.background = 'rgba(255,255,255,.15)';
+  document.getElementById('mcOpts').innerHTML='';
+  document.getElementById('mcStars').innerHTML='';
+  document.getElementById('g14Start').disabled=false;
+}
+document.getElementById('g14Start').addEventListener('click', startMatchColor);
+function startMatchColor(){
+  mcScore=0; mcTime=20;
+  document.getElementById('mcScore').textContent = `Skor: 0 | Waktu: ${mcTime}`;
+  document.getElementById('mcStars').innerHTML='';
+  document.getElementById('g14Start').disabled=true;
+  clearInterval(mcInterval);
+  nextMcRound();
+  mcInterval = setInterval(()=>{
+    mcTime--;
+    document.getElementById('mcScore').textContent = `Skor: ${mcScore} | Waktu: ${mcTime}`;
+    if(mcTime<=0){
+      clearInterval(mcInterval);
+      document.getElementById('g14Start').disabled=false;
+      const stars = mcScore>=15?3:mcScore>=8?2:mcScore>=3?1:0;
+      if(mcScore>=10) unlockAchievement('color_master');
+      document.getElementById('mcStars').innerHTML = starsRow(Math.max(stars,1));
+      if(stars>0){ launchConfetti(60); markGameDone(14, stars); }
+      document.getElementById('mcScore').textContent = `Skor akhir: ${mcScore}`;
+    }
+  }, 1000);
+}
+function nextMcRound(){
+  if(mcTime<=0) return;
+  mcTarget = MC_COLORS[Math.floor(Math.random()*MC_COLORS.length)];
+  document.getElementById('mcTarget').style.background = mcTarget;
+  let opts = shuffleArray([...MC_COLORS]).slice(0,4);
+  if(!opts.includes(mcTarget)) opts[0]=mcTarget;
+  opts = shuffleArray(opts);
+  const optsDiv = document.getElementById('mcOpts');
+  optsDiv.innerHTML = opts.map(c=>`<div class="color-opt" style="background:${c}" data-c="${c}"></div>`).join('');
+  optsDiv.querySelectorAll('.color-opt').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      if(mcTime<=0) return;
+      if(el.dataset.c===mcTarget){ mcScore++; vibrate(8); } else { mcScore=Math.max(0,mcScore-1); }
+      document.getElementById('mcScore').textContent = `Skor: ${mcScore} | Waktu: ${mcTime}`;
+      nextMcRound();
+    });
+  });
+}
+
+/* ============================================================================
+   GAME 15: Tebak Emoji
+============================================================================ */
+let emojiIndex=0, emojiScore=0;
+function initEmoji(){ emojiIndex=0; emojiScore=0; renderEmoji(); }
+function renderEmoji(){
+  const wrap = document.getElementById('emojiWrap');
+  if(emojiIndex>=EMOJI_RIDDLES.length){
+    const stars = emojiScore===EMOJI_RIDDLES.length?3:emojiScore>=EMOJI_RIDDLES.length-1?2:1;
+    if(emojiScore===EMOJI_RIDDLES.length) unlockAchievement('emoji_genius');
+    document.getElementById('emojiStars').innerHTML = starsRow(stars);
+    wrap.innerHTML = `<p class="quiz-q">Skor: ${emojiScore}/${EMOJI_RIDDLES.length}</p><button class="btn" id="emojiDone">Lanjut</button>`;
+    document.getElementById('emojiDone').addEventListener('click', ()=>{ launchConfetti(60); markGameDone(15, stars); showScreen('screenHub'); });
+    return;
+  }
+  const item = EMOJI_RIDDLES[emojiIndex];
+  wrap.innerHTML = `<div style="font-size:50px;margin:16px 0;">${item.emoji}</div>` + item.opts.map((o,i)=>`<button class="quiz-opt" data-i="${i}">${o}</button>`).join('');
+  wrap.querySelectorAll('.quiz-opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i = parseInt(btn.dataset.i);
+      wrap.querySelectorAll('.quiz-opt').forEach(b=>b.style.pointerEvents='none');
+      if(i===item.correct){ btn.classList.add('correct'); emojiScore++; }
+      else { btn.classList.add('wrong'); wrap.children[item.correct+1].classList.add('correct'); }
+      setTimeout(()=>{ emojiIndex++; renderEmoji(); }, 1400);
+    });
+  });
+}
+
+/* ============================================================================
+   GAME 16: Bubble Pop
+============================================================================ */
+let bubbleScore=0, bubbleTime=25, bubbleInterval=null, bubbleSpawner=null;
+function initBubble(){
+  bubbleScore=0; bubbleTime=25;
+  clearInterval(bubbleInterval); clearInterval(bubbleSpawner);
+  document.getElementById('bubbleArea').innerHTML='';
+  document.getElementById('bubbleScore').textContent = `Skor: 0 | Waktu: ${bubbleTime}`;
+  document.getElementById('bubbleStars').innerHTML='';
+  document.getElementById('g16Start').disabled=false;
+}
+document.getElementById('g16Start').addEventListener('click', startBubble);
+function startBubble(){
+  const area = document.getElementById('bubbleArea');
+  area.innerHTML=''; bubbleScore=0; bubbleTime=25;
+  document.getElementById('bubbleScore').textContent = `Skor: 0 | Waktu: ${bubbleTime}`;
+  document.getElementById('bubbleStars').innerHTML='';
+  document.getElementById('g16Start').disabled=true;
+  clearInterval(bubbleInterval); clearInterval(bubbleSpawner);
+  bubbleSpawner = setInterval(()=>{
+    const b = document.createElement('div');
+    const isBomb = Math.random()<0.18;
+    b.textContent = isBomb?'💣':'🫧';
+    b.style.cssText = `position:absolute;bottom:-40px;left:${Math.random()*88}%;font-size:${26+Math.random()*14}px;cursor:pointer;animation:rise ${3+Math.random()*2}s linear forwards;`;
+    area.appendChild(b);
+    b.addEventListener('click', ()=>{
+      if(isBomb){ bubbleScore=Math.max(0,bubbleScore-3); } else { bubbleScore++; vibrate(8); }
+      document.getElementById('bubbleScore').textContent = `Skor: ${bubbleScore} | Waktu: ${bubbleTime}`;
+      launchConfetti(6);
+      b.remove();
+    });
+    b.addEventListener('animationend', ()=>b.remove());
+  }, 500);
+  bubbleInterval = setInterval(()=>{
+    bubbleTime--;
+    document.getElementById('bubbleScore').textContent = `Skor: ${bubbleScore} | Waktu: ${bubbleTime}`;
+    if(bubbleTime<=0){
+      clearInterval(bubbleInterval); clearInterval(bubbleSpawner);
+      area.innerHTML=''; document.getElementById('g16Start').disabled=false;
+      if(bubbleScore>state.highScores.bubble) state.highScores.bubble = bubbleScore;
+      const stars = bubbleScore>=20?3:bubbleScore>=12?2:bubbleScore>=5?1:0;
+      if(bubbleScore>=15) unlockAchievement('bubble_pro');
+      document.getElementById('bubbleStars').innerHTML = starsRow(Math.max(stars,1));
+      if(stars>0){ launchConfetti(60); markGameDone(16, stars); }
+      document.getElementById('bubbleScore').textContent = `Skor akhir: ${bubbleScore}`;
+    }
+  }, 1000);
+}
+
+/* ============================================================================
+   GAME 17: Maze Love
+============================================================================ */
+const MAZE_LAYOUT = ["0000000","0111110","0000010","0111010","0100010","0101110","0100000"];
+let mazePos={r:0,c:0}, mazeMoves=0;
+function initMaze(){
+  mazePos={r:0,c:0}; mazeMoves=0;
+  document.getElementById('mazeMoves').textContent='Langkah: 0';
+  document.getElementById('mazeStars').innerHTML='';
+  renderMaze();
+}
+function renderMaze(){
+  const grid = document.getElementById('mazeGrid');
+  const rows = MAZE_LAYOUT.length, cols = MAZE_LAYOUT[0].length;
+  grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  let html='';
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      let cls='maze-cell'+(MAZE_LAYOUT[r][c]==='1'?' wall':'');
+      let content='';
+      if(r===mazePos.r && c===mazePos.c) content='💗';
+      else if(r===rows-1 && c===cols-1) content='🏁';
+      html += `<div class="${cls}">${content}</div>`;
+    }
+  }
+  grid.innerHTML = html;
+}
+function moveMaze(dr,dc){
+  const rows=MAZE_LAYOUT.length, cols=MAZE_LAYOUT[0].length;
+  const nr=mazePos.r+dr, nc=mazePos.c+dc;
+  if(nr<0||nc<0||nr>=rows||nc>=cols||MAZE_LAYOUT[nr][nc]==='1') return;
+  mazePos={r:nr,c:nc}; mazeMoves++;
+  document.getElementById('mazeMoves').textContent='Langkah: '+mazeMoves;
+  renderMaze();
+  if(nr===rows-1 && nc===cols-1){
+    const stars = mazeMoves<=14?3:mazeMoves<=20?2:1;
+    document.getElementById('mazeStars').innerHTML = starsRow(stars);
+    launchConfetti(60); vibrate(20);
+    markGameDone(17, stars);
+    setTimeout(()=>showScreen('screenHub'), 1500);
+  }
+}
+document.addEventListener('keydown', e=>{
+  if(!document.getElementById('screenG17').classList.contains('active')) return;
+  if(e.key==='ArrowUp') moveMaze(-1,0);
+  if(e.key==='ArrowDown') moveMaze(1,0);
+  if(e.key==='ArrowLeft') moveMaze(0,-1);
+  if(e.key==='ArrowRight') moveMaze(0,1);
+});
+let mazeTouchStart=null;
+document.getElementById('mazeGrid').addEventListener('touchstart', e=>{ mazeTouchStart={x:e.touches[0].clientX,y:e.touches[0].clientY}; });
+document.getElementById('mazeGrid').addEventListener('touchend', e=>{
+  if(!mazeTouchStart) return;
+  const dx=e.changedTouches[0].clientX-mazeTouchStart.x, dy=e.changedTouches[0].clientY-mazeTouchStart.y;
+  if(Math.abs(dx)>Math.abs(dy)){ dx>0?moveMaze(0,1):moveMaze(0,-1); } else { dy>0?moveMaze(1,0):moveMaze(-1,0); }
+});
+document.getElementById('g17Reset').addEventListener('click', initMaze);
+
+/* ============================================================================
+   GAME 18: Cari Perbedaan
+============================================================================ */
+const DIFF_BASE_EMOJIS = ['🌸','🌺','🌷','🌹','🍀','⭐','💫','🎀'];
+let diffData={leftGrid:[],rightGrid:[],diffIndices:[],found:new Set()}, diffTime=30, diffInterval=null, diffFoundCount=0;
+function initDiffGame(){
+  clearInterval(diffInterval);
+  document.getElementById('diffScore').textContent='Ditemukan: 0/4 | Waktu: 30';
+  document.getElementById('diffStars').innerHTML='';
+  document.getElementById('diffGridLeft').innerHTML='';
+  document.getElementById('diffGridRight').innerHTML='';
+  document.getElementById('g18Start').disabled=false;
+}
+function startDiffGame(){
+  diffFoundCount=0; diffTime=30;
+  document.getElementById('g18Start').disabled=true;
+  const base=[]; for(let i=0;i<25;i++) base.push(DIFF_BASE_EMOJIS[Math.floor(Math.random()*DIFF_BASE_EMOJIS.length)]);
+  const right=[...base]; const diffIdx=[];
+  while(diffIdx.length<4){
+    const idx=Math.floor(Math.random()*25);
+    if(!diffIdx.includes(idx)){
+      let newEmoji; do{ newEmoji=DIFF_BASE_EMOJIS[Math.floor(Math.random()*DIFF_BASE_EMOJIS.length)]; } while(newEmoji===base[idx]);
+      right[idx]=newEmoji; diffIdx.push(idx);
+    }
+  }
+  diffData={leftGrid:base,rightGrid:right,diffIndices:diffIdx,found:new Set()};
+  renderDiffGrids();
+  document.getElementById('diffScore').textContent=`Ditemukan: 0/4 | Waktu: ${diffTime}`;
+  clearInterval(diffInterval);
+  diffInterval = setInterval(()=>{
+    diffTime--;
+    document.getElementById('diffScore').textContent=`Ditemukan: ${diffFoundCount}/4 | Waktu: ${diffTime}`;
+    if(diffTime<=0){
+      clearInterval(diffInterval);
+      document.getElementById('g18Start').disabled=false;
+      const stars = diffFoundCount===4?3:diffFoundCount>=2?2:diffFoundCount>=1?1:0;
+      document.getElementById('diffStars').innerHTML = starsRow(Math.max(stars,1));
+      if(stars>0){ launchConfetti(50); markGameDone(18, stars); }
+    }
+  }, 1000);
+}
+function renderDiffGrids(){
+  document.getElementById('diffGridLeft').innerHTML = diffData.leftGrid.map(e=>`<div class="diff-cell">${e}</div>`).join('');
+  document.getElementById('diffGridRight').innerHTML = diffData.rightGrid.map((e,i)=>`<div class="diff-cell" data-i="${i}">${e}</div>`).join('');
+  document.querySelectorAll('#diffGridRight .diff-cell').forEach(cell=>{
+    cell.addEventListener('click', ()=>{
+      const i = parseInt(cell.dataset.i);
+      if(diffData.found.has(i)) return;
+      if(diffData.diffIndices.includes(i)){
+        diffData.found.add(i); cell.classList.add('found'); diffFoundCount++;
+        document.getElementById('diffScore').textContent=`Ditemukan: ${diffFoundCount}/4 | Waktu: ${diffTime}`;
+        vibrate(10);
+        if(diffFoundCount===4){
+          clearInterval(diffInterval);
+          document.getElementById('g18Start').disabled=false;
+          document.getElementById('diffStars').innerHTML = starsRow(3);
+          launchConfetti(70); markGameDone(18, 3);
+          setTimeout(()=>showScreen('screenHub'), 1500);
+        }
+      } else {
+        cell.classList.add('wrong-flash');
+        setTimeout(()=>cell.classList.remove('wrong-flash'), 300);
+      }
+    });
+  });
+}
+document.getElementById('g18Start').addEventListener('click', startDiffGame);
+
+/* ============================================================================
+   GAME 19: Space Shooter Love (canvas)
+============================================================================ */
+const shooterCanvasCtx = document.getElementById('shooterCanvas').getContext('2d');
+let shooterShip, shooterBullets, shooterEnemies, shooterScore, shooterLives, shooterLoop, shooterRunning=false, shooterFrame=0;
+function initShooter(){
+  shooterShip={x:150,y:330}; shooterBullets=[]; shooterEnemies=[]; shooterScore=0; shooterLives=3; shooterFrame=0; shooterRunning=false;
+  drawShooter();
+  document.getElementById('shooterScore').textContent = `Skor: 0 | Rekor: ${state.highScores.shooter||0}`;
+  document.getElementById('shooterStars').innerHTML='';
+}
+function drawShooter(){
+  const ctx = shooterCanvasCtx;
+  ctx.clearRect(0,0,300,360);
+  ctx.font='28px sans-serif'; ctx.fillText('🚀', shooterShip.x-14, shooterShip.y+14);
+  ctx.font='20px sans-serif';
+  shooterBullets.forEach(b=>ctx.fillText('💋', b.x-8, b.y));
+  shooterEnemies.forEach(en=>ctx.fillText('💔', en.x-10, en.y));
+  ctx.fillStyle='#fff'; ctx.font='14px sans-serif'; ctx.fillText('❤️'.repeat(shooterLives), 8, 18);
+}
+function shooterStep(){
+  shooterFrame++;
+  if(shooterFrame%55===0) shooterEnemies.push({x:20+Math.random()*260, y:-10});
+  shooterBullets.forEach(b=>b.y-=6);
+  shooterEnemies.forEach(en=>en.y+=1.6);
+  shooterBullets = shooterBullets.filter(b=>b.y>-20);
+  for(let i=shooterEnemies.length-1;i>=0;i--){
+    const en = shooterEnemies[i];
+    for(let j=shooterBullets.length-1;j>=0;j--){
+      const b = shooterBullets[j];
+      if(Math.abs(en.x-b.x)<16 && Math.abs(en.y-b.y)<16){ shooterEnemies.splice(i,1); shooterBullets.splice(j,1); shooterScore++; vibrate(8); break; }
+    }
+  }
+  for(let i=shooterEnemies.length-1;i>=0;i--){
+    const en = shooterEnemies[i];
+    if(!en) continue;
+    if(en.y>350){ shooterEnemies.splice(i,1); shooterLives--; }
+    else if(Math.abs(en.x-shooterShip.x)<18 && Math.abs(en.y-shooterShip.y)<18){ shooterEnemies.splice(i,1); shooterLives--; }
+  }
+  document.getElementById('shooterScore').textContent = `Skor: ${shooterScore} | Rekor: ${state.highScores.shooter||0}`;
+  drawShooter();
+  if(shooterLives<=0) endShooter();
+}
+function endShooter(){
+  clearInterval(shooterLoop); shooterRunning=false;
+  if(!state.highScores.shooter || shooterScore>state.highScores.shooter) state.highScores.shooter=shooterScore;
+  const stars = shooterScore>=15?3:shooterScore>=8?2:shooterScore>=3?1:0;
+  document.getElementById('shooterStars').innerHTML = starsRow(Math.max(stars,1));
+  document.getElementById('g19Start').disabled=false; document.getElementById('g19Start').textContent='Main Lagi';
+  if(stars>0){ launchConfetti(50); markGameDone(19, stars); }
+}
+function shooterFire(){ if(shooterRunning) shooterBullets.push({x:shooterShip.x, y:shooterShip.y-10}); }
+function shooterMove(dx){ if(shooterRunning) shooterShip.x = Math.max(15, Math.min(285, shooterShip.x+dx)); }
+document.addEventListener('keydown', e=>{
+  if(!document.getElementById('screenG19').classList.contains('active')) return;
+  if(e.key==='ArrowLeft') shooterMove(-15);
+  if(e.key==='ArrowRight') shooterMove(15);
+  if(e.code==='Space') shooterFire();
+});
+document.getElementById('shooterCanvas').addEventListener('click', shooterFire);
+let shooterTouchX=null;
+document.getElementById('shooterCanvas').addEventListener('touchstart', e=>{ shooterTouchX=e.touches[0].clientX; shooterFire(); });
+document.getElementById('shooterCanvas').addEventListener('touchmove', e=>{
+  if(shooterTouchX===null) return;
+  shooterMove((e.touches[0].clientX-shooterTouchX)*0.5); shooterTouchX = e.touches[0].clientX;
+});
+document.getElementById('g19Start').addEventListener('click', ()=>{
+  initShooter(); shooterRunning=true;
+  document.getElementById('g19Start').disabled=true;
+  clearInterval(shooterLoop); shooterLoop=setInterval(shooterStep, 30);
+});
+
+/* ============================================================================
+   GAME 20: Rhythm of Love (canvas)
+============================================================================ */
+const rhythmCanvasCtx = document.getElementById('rhythmCanvas').getContext('2d');
+let rhythmNotes=[], rhythmScore=0, rhythmCombo=0, rhythmLoop=null, rhythmRunning=false, rhythmFrame=0;
+const RHYTHM_LANES=4, RHYTHM_LANE_W=300/RHYTHM_LANES;
+function initRhythm(){
+  rhythmNotes=[]; rhythmScore=0; rhythmCombo=0; rhythmFrame=0; rhythmRunning=false;
+  drawRhythm();
+  document.getElementById('rhythmScore').textContent='Skor: 0 | Combo: 0';
+  document.getElementById('rhythmStars').innerHTML='';
+}
+function drawRhythm(){
+  const ctx = rhythmCanvasCtx;
+  ctx.clearRect(0,0,300,360);
+  ctx.strokeStyle='rgba(255,255,255,.15)';
+  for(let i=1;i<RHYTHM_LANES;i++){ ctx.beginPath(); ctx.moveTo(i*RHYTHM_LANE_W,0); ctx.lineTo(i*RHYTHM_LANE_W,360); ctx.stroke(); }
+  ctx.fillStyle='rgba(255,209,102,.4)'; ctx.fillRect(0,330,300,6);
+  const colors=['#ff6fa5','#a06bff','#ffd166','#5fc8ff'];
+  rhythmNotes.forEach(n=>{ ctx.fillStyle=colors[n.lane]; ctx.beginPath(); ctx.arc(n.lane*RHYTHM_LANE_W+RHYTHM_LANE_W/2, n.y, 14, 0, Math.PI*2); ctx.fill(); });
+}
+function rhythmStep(){
+  rhythmFrame++;
+  if(rhythmFrame%45===0 && rhythmFrame<45*20){ rhythmNotes.push({lane:Math.floor(Math.random()*4), y:-10}); }
+  rhythmNotes.forEach(n=>n.y+=3.2);
+  for(let i=rhythmNotes.length-1;i>=0;i--){ if(rhythmNotes[i].y>360){ rhythmNotes.splice(i,1); rhythmCombo=0; } }
+  drawRhythm();
+  document.getElementById('rhythmScore').textContent = `Skor: ${rhythmScore} | Combo: ${rhythmCombo}`;
+  if(rhythmFrame>45*20+60 && rhythmNotes.length===0){ endRhythm(); }
+}
+function rhythmHit(lane){
+  if(!rhythmRunning) return;
+  let closestIdx=-1, closestDist=999;
+  rhythmNotes.forEach((n,i)=>{ if(n.lane===lane){ const dist=Math.abs(n.y-330); if(dist<closestDist){ closestDist=dist; closestIdx=i; } } });
+  if(closestIdx>=0 && closestDist<40){ rhythmNotes.splice(closestIdx,1); rhythmScore += closestDist<15?3:1; rhythmCombo++; vibrate(8); }
+  else { rhythmCombo=0; }
+  document.getElementById('rhythmScore').textContent = `Skor: ${rhythmScore} | Combo: ${rhythmCombo}`;
+}
+document.querySelectorAll('#screenG20 [data-lane]').forEach(btn=>btn.addEventListener('click', ()=>rhythmHit(parseInt(btn.dataset.lane))));
+document.addEventListener('keydown', e=>{
+  if(!document.getElementById('screenG20').classList.contains('active')) return;
+  const keys={'1':0,'2':1,'3':2,'4':3};
+  if(keys[e.key]!==undefined) rhythmHit(keys[e.key]);
+});
+function endRhythm(){
+  clearInterval(rhythmLoop); rhythmRunning=false;
+  const stars = rhythmScore>=40?3:rhythmScore>=20?2:rhythmScore>=8?1:0;
+  document.getElementById('rhythmStars').innerHTML = starsRow(Math.max(stars,1));
+  document.getElementById('g20Start').disabled=false; document.getElementById('g20Start').textContent='Main Lagi';
+  if(stars>0){ launchConfetti(50); markGameDone(20, stars); }
+}
+document.getElementById('g20Start').addEventListener('click', ()=>{
+  initRhythm(); rhythmRunning=true;
+  document.getElementById('g20Start').disabled=true;
+  clearInterval(rhythmLoop); rhythmLoop = setInterval(rhythmStep, 30);
+});
+
+/* ============================================================================
+   GAME 21: Tangkap Hadiah
+============================================================================ */
+let basketX=50, giftCatchScore=0, giftCatchTime=30, giftCatchInterval=null, giftCatchSpawner=null;
+function initGiftCatch(){
+  giftCatchScore=0; giftCatchTime=30; basketX=50;
+  document.getElementById('giftCatchArea').innerHTML='<div id="giftBasket" style="left:50%;">🧺</div>';
+  document.getElementById('giftCatchScore').textContent = `Skor: 0 | Waktu: ${giftCatchTime}`;
+  document.getElementById('giftCatchStars').innerHTML='';
+  document.getElementById('g21Start').disabled=false;
+  clearInterval(giftCatchInterval); clearInterval(giftCatchSpawner);
+}
+function moveBasket(px){
+  basketX = Math.max(5, Math.min(90, basketX+px));
+  const basket = document.getElementById('giftBasket');
+  if(basket) basket.style.left = basketX+'%';
+}
+document.addEventListener('keydown', e=>{
+  if(!document.getElementById('screenG21').classList.contains('active')) return;
+  if(e.key==='ArrowLeft') moveBasket(-6);
+  if(e.key==='ArrowRight') moveBasket(6);
+});
+document.getElementById('giftCatchArea').addEventListener('mousemove', e=>{
+  const rect = document.getElementById('giftCatchArea').getBoundingClientRect();
+  basketX = Math.max(5, Math.min(90, ((e.clientX-rect.left)/rect.width)*100));
+  const basket = document.getElementById('giftBasket'); if(basket) basket.style.left = basketX+'%';
+});
+document.getElementById('giftCatchArea').addEventListener('touchmove', e=>{
+  const rect = document.getElementById('giftCatchArea').getBoundingClientRect();
+  basketX = Math.max(5, Math.min(90, ((e.touches[0].clientX-rect.left)/rect.width)*100));
+  const basket = document.getElementById('giftBasket'); if(basket) basket.style.left = basketX+'%';
+});
+document.getElementById('g21Start').addEventListener('click', startGiftCatch);
+function startGiftCatch(){
+  const area = document.getElementById('giftCatchArea');
+  giftCatchScore=0; giftCatchTime=30;
+  document.getElementById('giftCatchScore').textContent = `Skor: 0 | Waktu: ${giftCatchTime}`;
+  document.getElementById('g21Start').disabled=true;
+  clearInterval(giftCatchInterval); clearInterval(giftCatchSpawner);
+  giftCatchSpawner = setInterval(()=>{
+    const isBomb = Math.random()<0.25;
+    const item = document.createElement('div');
+    item.className='falling-gift'; item.textContent = isBomb?'💣':'🎁';
+    const leftPct = 8+Math.random()*84;
+    item.style.left = leftPct+'%'; item.style.animationDuration = (2.4+Math.random()*1.6)+'s';
+    item.dataset.left = leftPct; item.dataset.bomb = isBomb;
+    area.appendChild(item);
+    item.addEventListener('animationend', ()=>{
+      const itemLeftPct = parseFloat(item.dataset.left);
+      if(Math.abs(itemLeftPct-basketX)<10){
+        if(item.dataset.bomb==='true'){ giftCatchScore=Math.max(0,giftCatchScore-2); } else { giftCatchScore++; vibrate(8); }
+        document.getElementById('giftCatchScore').textContent = `Skor: ${giftCatchScore} | Waktu: ${giftCatchTime}`;
+      }
+      item.remove();
+    });
+  }, 700);
+  giftCatchInterval = setInterval(()=>{
+    giftCatchTime--;
+    document.getElementById('giftCatchScore').textContent = `Skor: ${giftCatchScore} | Waktu: ${giftCatchTime}`;
+    if(giftCatchTime<=0){
+      clearInterval(giftCatchInterval); clearInterval(giftCatchSpawner);
+      area.querySelectorAll('.falling-gift').forEach(el=>el.remove());
+      document.getElementById('g21Start').disabled=false;
+      const stars = giftCatchScore>=15?3:giftCatchScore>=8?2:giftCatchScore>=3?1:0;
+      document.getElementById('giftCatchStars').innerHTML = starsRow(Math.max(stars,1));
+      if(stars>0){ launchConfetti(50); markGameDone(21, stars); }
+    }
+  }, 1000);
+}
+
+/* ============================================================================
+   GAME 22: Escape Room Cinta
+============================================================================ */
+function initEscape(){
+  document.getElementById('escapeClue').textContent = ESCAPE_CLUE;
+  document.getElementById('escapeCodeInput').value='';
+  document.getElementById('escapeMsg').textContent='';
+  document.getElementById('escapeStars').innerHTML='';
+}
+document.getElementById('escapeSubmit').addEventListener('click', ()=>{
+  const val = document.getElementById('escapeCodeInput').value.trim();
+  if(val === ESCAPE_CODE){
+    document.getElementById('escapeMsg').textContent = '🔓 Pintu terbuka! Kamu berhasil kabur bersama 💕';
+    document.getElementById('escapeStars').innerHTML = starsRow(3);
+    launchConfetti(70); vibrate(30);
+    markGameDone(22, 3);
+    setTimeout(()=>showScreen('screenHub'), 1800);
+  } else {
+    document.getElementById('escapeMsg').textContent = 'Kode salah, coba lagi ya 🤔';
+    vibrate(15);
+  }
+});
+
+/* ============================================================================
+   GAME 23: Memory Level Hard
+============================================================================ */
+let hardMemFirst=null, hardMemLock=false, hardMemMatched=0, hardMemTimer=null, hardMemTime=120;
+function initHardMemory(){
+  const grid = document.getElementById('hardMemoryGrid');
+  grid.innerHTML=''; hardMemFirst=null; hardMemLock=false; hardMemMatched=0; hardMemTime=90;
+  clearInterval(hardMemTimer);
+  document.getElementById('hardMemStatus').textContent = 'Waktu: 90';
+  document.getElementById('hardMemStars').innerHTML='';
+  const icons = ['💖','🎂','🎈','🌹','💍','🍫','🎁','⭐','🌙','☀️','🍓','🦋'];
+  let deck=[...icons,...icons];
+  deck.sort(()=>Math.random()-0.5);
+  deck.forEach(icon=>{
+    const card=document.createElement('div');
+    card.className='card'; card.dataset.icon=icon; card.textContent='❔';
+    card.addEventListener('click', ()=>flipHardCard(card));
+    grid.appendChild(card);
+  });
+  hardMemTimer = setInterval(()=>{
+    hardMemTime--;
+    document.getElementById('hardMemStatus').textContent = 'Waktu: '+hardMemTime;
+    if(hardMemTime<=0){
+      clearInterval(hardMemTimer);
+      document.getElementById('hardMemStatus').textContent = 'Waktu habis! Coba lagi ya';
+      grid.querySelectorAll('.card').forEach(c=>c.style.pointerEvents='none');
+    }
+  }, 1000);
+}
+function flipHardCard(card){
+  if(hardMemLock || hardMemTime<=0 || card.classList.contains('flip') || card.classList.contains('matched')) return;
+  card.classList.add('flip'); card.textContent = card.dataset.icon;
+  if(!hardMemFirst){ hardMemFirst=card; }
+  else {
+    hardMemLock=true;
+    if(hardMemFirst.dataset.icon===card.dataset.icon){
+      hardMemFirst.classList.add('matched'); card.classList.add('matched'); hardMemMatched++;
+      hardMemFirst=null; hardMemLock=false;
+      if(hardMemMatched===12){
+        clearInterval(hardMemTimer);
+        const stars = hardMemTime>=20?3:hardMemTime>=15?2:1;
+        document.getElementById('hardMemStars').innerHTML = starsRow(stars);
+        document.getElementById('hardMemStatus').textContent = 'Selesai! 🎉';
+        launchConfetti(80); markGameDone(23, stars);
+        setTimeout(()=>showScreen('screenHub'), 2000);
+      }
+    } else {
+      setTimeout(()=>{
+        card.classList.remove('flip'); card.textContent='❔';
+        hardMemFirst.classList.remove('flip'); hardMemFirst.textContent='❔';
+        hardMemFirst=null; hardMemLock=false;
+      }, 800);
+    }
+  }
+}
+document.getElementById('g23Reset').addEventListener('click', initHardMemory);
+
+/* ============================================================================
+   GAME 24: Fruit Slice Love (canvas)
+============================================================================ */
+const sliceCanvasCtx = document.getElementById('sliceCanvas').getContext('2d');
+const sliceCanvasEl = document.getElementById('sliceCanvas');
+let sliceFruits=[], sliceScore=0, sliceLoop=null, sliceRunning=false, sliceFrame=0, sliceDragging=false;
+function initSlice(){
+  sliceFruits=[]; sliceScore=0; sliceFrame=0; sliceRunning=false;
+  drawSlice();
+  document.getElementById('sliceScore').textContent = `Skor: 0 | Rekor: ${state.highScores.slice||0}`;
+  document.getElementById('sliceStars').innerHTML='';
+}
+function drawSlice(){
+  const ctx = sliceCanvasCtx;
+  ctx.clearRect(0,0,300,360);
+  ctx.font='30px sans-serif';
+  sliceFruits.forEach(f=>{ if(!f.sliced) ctx.fillText(f.emoji, f.x-15, f.y+10); });
+}
+function sliceStep(){
+  sliceFrame++;
+  if(sliceFrame%50===0){
+    const isBomb = Math.random()<0.15;
+    sliceFruits.push({x:40+Math.random()*220, y:360, vy:-9-Math.random()*2, vx:(Math.random()-0.5)*2, emoji:isBomb?'💣':['🍓','💖','🍒','🍑'][Math.floor(Math.random()*4)], bomb:isBomb, sliced:false});
+  }
+  sliceFruits.forEach(f=>{ f.vy+=0.28; f.x+=f.vx; f.y+=f.vy; });
+  sliceFruits = sliceFruits.filter(f=>f.y<400 && !f.sliced);
+  drawSlice();
+}
+function trySlice(x,y){
+  sliceFruits.forEach(f=>{
+    if(!f.sliced && Math.abs(f.x-x)<24 && Math.abs(f.y-y)<24){
+      f.sliced=true;
+      if(f.bomb){ sliceScore=Math.max(0,sliceScore-3); } else { sliceScore++; vibrate(8); }
+      document.getElementById('sliceScore').textContent = `Skor: ${sliceScore} | Rekor: ${state.highScores.slice||0}`;
+      launchConfetti(8);
+    }
+  });
+}
+function slicePointerPos(e){
+  const rect = sliceCanvasEl.getBoundingClientRect();
+  const clientX = e.touches?e.touches[0].clientX:e.clientX;
+  const clientY = e.touches?e.touches[0].clientY:e.clientY;
+  return { x:(clientX-rect.left)/rect.width*300, y:(clientY-rect.top)/rect.height*360 };
+}
+sliceCanvasEl.addEventListener('pointerdown', e=>{ if(!sliceRunning) return; sliceDragging=true; const p=slicePointerPos(e); trySlice(p.x,p.y); });
+sliceCanvasEl.addEventListener('pointermove', e=>{ if(!sliceDragging) return; const p=slicePointerPos(e); trySlice(p.x,p.y); });
+window.addEventListener('pointerup', ()=>{ sliceDragging=false; });
+function endSliceGame(){
+  clearInterval(sliceLoop); sliceRunning=false;
+  if(!state.highScores.slice || sliceScore>state.highScores.slice) state.highScores.slice = sliceScore;
+  const stars = sliceScore>=12?3:sliceScore>=8?2:sliceScore>=3?1:0;
+  document.getElementById('sliceStars').innerHTML = starsRow(Math.max(stars,1));
+  document.getElementById('g24Start').disabled=false; document.getElementById('g24Start').textContent='Main Lagi';
+  if(stars>0){ launchConfetti(50); markGameDone(24, stars); }
+}
+document.getElementById('g24Start').addEventListener('click', ()=>{
+  initSlice(); sliceRunning=true;
+  document.getElementById('g24Start').disabled=true;
+  clearInterval(sliceLoop); sliceLoop = setInterval(sliceStep, 30);
+  setTimeout(endSliceGame, 25000);
+});
+
+/* ============================================================================
+   GAME 25: Parkour Mini (canvas)
+============================================================================ */
+const parkourCanvasCtx = document.getElementById('parkourCanvas').getContext('2d');
+let parkourPlayer, parkourObstacles, parkourScore=0, parkourLoop=null, parkourRunning=false, parkourFrame=0, parkourSpeed=4;
+function initParkour(){
+  parkourPlayer={y:150,vy:0,onGround:true}; parkourObstacles=[]; parkourScore=0; parkourFrame=0; parkourRunning=false; parkourSpeed=4;
+  drawParkour();
+  document.getElementById('parkourScore').textContent = `Skor: 0 | Rekor: ${state.highScores.parkour||0}`;
+  document.getElementById('parkourStars').innerHTML='';
+}
+function drawParkour(){
+  const ctx = parkourCanvasCtx;
+  ctx.clearRect(0,0,300,200);
+  ctx.fillStyle='rgba(255,255,255,.15)'; ctx.fillRect(0,180,300,4);
+  ctx.font='28px sans-serif'; ctx.fillText('🏃', 40, parkourPlayer.y);
+  parkourObstacles.forEach(o=>ctx.fillText('🌵', o.x, 178));
+}
+function parkourStep(){
+  parkourFrame++;
+  parkourScore = Math.floor(parkourFrame/10);
+  if(parkourFrame%70===0) parkourObstacles.push({x:300});
+  parkourPlayer.vy += 0.9; parkourPlayer.y += parkourPlayer.vy;
+  if(parkourPlayer.y>150){ parkourPlayer.y=150; parkourPlayer.vy=0; parkourPlayer.onGround=true; }
+  parkourObstacles.forEach(o=>o.x-=parkourSpeed);
+  parkourObstacles = parkourObstacles.filter(o=>o.x>-20);
+  parkourObstacles.forEach(o=>{ if(o.x<58 && o.x>28 && parkourPlayer.y>135){ endParkour(); } });
+  if(parkourFrame%400===0) parkourSpeed+=0.5;
+  document.getElementById('parkourScore').textContent = `Skor: ${parkourScore} | Rekor: ${state.highScores.parkour||0}`;
+  drawParkour();
+}
+function parkourJump(){ if(parkourRunning && parkourPlayer.onGround){ parkourPlayer.vy=-13; parkourPlayer.onGround=false; } }
+document.getElementById('parkourCanvas').addEventListener('mousedown', parkourJump);
+document.getElementById('parkourCanvas').addEventListener('touchstart', e=>{ e.preventDefault(); parkourJump(); });
+document.addEventListener('keydown', e=>{ if(e.code==='Space' && document.getElementById('screenG25').classList.contains('active')) parkourJump(); });
+function endParkour(){
+  clearInterval(parkourLoop); parkourRunning=false;
+  if(!state.highScores.parkour || parkourScore>state.highScores.parkour) state.highScores.parkour = parkourScore;
+  const stars = parkourScore>=30?3:parkourScore>=20?2:parkourScore>=8?1:0;
+  document.getElementById('parkourStars').innerHTML = starsRow(Math.max(stars,1));
+  document.getElementById('g25Start').disabled=false; document.getElementById('g25Start').textContent='Main Lagi';
+  if(stars>0){ launchConfetti(50); markGameDone(25, stars); }
+}
+document.getElementById('g25Start').addEventListener('click', ()=>{
+  initParkour(); parkourRunning=true;
+  document.getElementById('g25Start').disabled=true;
+  clearInterval(parkourLoop); parkourLoop = setInterval(parkourStep, 30);
+});
+
+/* ============================================================================
+   MENU NAVIGATION -> initialize each section on open
+============================================================================ */
+document.querySelectorAll('.menu-card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    const target = card.dataset.nav;
+    vibrate(10);
+    if(target==='screenStory') initStory();
+    if(target==='screenTimeline') renderTimeline();
+    if(target==='screenGallery'){ galleryIndex=0; renderGallery(); }
+    if(target==='screenVideo') initVideo();
+    if(target==='screenMusic') initMusicPlayer();
+    if(target==='screenAchievements') renderAchievements();
+    if(target==='screenGift') renderGiftGrid();
+    if(target==='screenLetter') initLetter();
+    if(target==='screenSocial'){ renderGuestbook(); renderLeaderboard(); }
+    if(target==='screenFinal') initEnding();
+  });
+});
+
+/* ============================================================================
+   ENDING PAGE: blow candle (mic), cake cut, balloons, fireworks, certificate,
+   countdown to next birthday
+============================================================================ */
+let candleOut=false, endingRevealed=false;
+function initEnding(){
+  candleOut=false; endingRevealed=false;
+  document.getElementById('candleFlame').classList.remove('out');
+  document.getElementById('finalMsg').style.display='none';
+  document.getElementById('certBox').style.display='none';
+  document.getElementById('blowHint').textContent = 'Tiup lilinnya lewat mic, atau tekan tombol di bawah 👇';
+  document.getElementById('certName').textContent = CERT_NAME;
+  document.getElementById('certTitle').textContent = CERT_TITLE;
+  startCountdownNext();
+  tryMicBlow();
+}
+function extinguishCandle(){
+  if(candleOut) return;
+  candleOut=true;
+  document.getElementById('candleFlame').classList.add('out');
+  document.getElementById('blowHint').textContent = '🕯️ Lilin padam! Yeay~';
+  launchFireworks(4);
+  launchConfetti(60);
+  vibrate([40,30,40]);
+  setTimeout(revealEnding, 900);
+}
+document.getElementById('blowBtn').addEventListener('click', extinguishCandle);
+document.getElementById('cakeEl').addEventListener('click', ()=>{
+  if(!candleOut){ showToast('Tiup lilinnya dulu sebelum motong kue! 🎂'); return; }
+  document.getElementById('cakeEl').style.transform='scale(0.9) rotate(-4deg)';
+  showToast('🔪 Kue berhasil dipotong! Selamat menikmati~');
+  vibrate(20);
+});
+function tryMicBlow(){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    const ac = new (window.AudioContext||window.webkitAudioContext)();
+    const src = ac.createMediaStreamSource(stream);
+    const analyser = ac.createAnalyser();
+    analyser.fftSize=512;
+    src.connect(analyser);
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    let blowFrames=0;
+    const checkInterval = setInterval(()=>{
+      if(candleOut || !document.getElementById('screenFinal').classList.contains('active')){
+        clearInterval(checkInterval); stream.getTracks().forEach(t=>t.stop()); return;
+      }
+      analyser.getByteFrequencyData(data);
+      const avg = data.reduce((a,b)=>a+b,0)/data.length;
+      if(avg>35){ blowFrames++; } else { blowFrames=Math.max(0,blowFrames-1); }
+      if(blowFrames>4){ extinguishCandle(); clearInterval(checkInterval); stream.getTracks().forEach(t=>t.stop()); }
+    }, 120);
+  }).catch(()=>{ /* mic tidak diizinkan, fallback tombol tetap tersedia */ });
+}
+function revealEnding(){
+  if(endingRevealed) return;
+  endingRevealed=true;
+  const msgEl = document.getElementById('finalMsg');
+  msgEl.style.display='block';
+  msgEl.innerHTML = '';
+  const lines = [
+    'Kamu berhasil menyelesaikan semua kejutannya! 🥳',
+    'Terima kasih sudah jadi kamu yang selalu bikin hari-hariku lebih berwarna.',
+    'Semoga di umur yang baru ini kamu makin bahagia, makin sehat, makin disayang.',
+    'Aku bersyukur banget punya kamu di hidupku.',
+    'Aku sayang kamu, sekarang, besok, dan selamanya. 💖'
+  ];
+  lines.forEach((line,i)=>{
+    setTimeout(()=>{
+      const p = document.createElement('p');
+      p.style.opacity='0'; p.style.transition='opacity .6s'; p.style.marginBottom='8px';
+      p.textContent = line;
+      msgEl.appendChild(p);
+      requestAnimationFrame(()=>p.style.opacity='1');
+    }, i*900);
+  });
+  setTimeout(()=>{
+    document.getElementById('certBox').style.display='block';
+    for(let i=0;i<8;i++){
+      setTimeout(()=>{
+        const b = document.createElement('div');
+        b.className='balloon-fly';
+        b.textContent = ['🎈','🎈','💗'][Math.floor(Math.random()*3)];
+        b.style.left = (10+Math.random()*80)+'%';
+        b.style.setProperty('--bx', (Math.random()*100-50)+'px');
+        document.body.appendChild(b);
+        setTimeout(()=>b.remove(), 5200);
+      }, i*180);
+    }
+  }, lines.length*900+400);
+}
+function startCountdownNext(){
+  clearInterval(startCountdownNext._int);
+  function update(){
+    const target = new Date(NEXT_BIRTHDAY).getTime();
+    const now = Date.now();
+    let diff = target-now;
+    const el = document.getElementById('countdownNext');
+    if(diff<=0){ el.textContent = '🎉 Selamat ulang tahun hari ini!'; return; }
+    const d = Math.floor(diff/86400000); diff-=d*86400000;
+    const h = Math.floor(diff/3600000); diff-=h*3600000;
+    const m = Math.floor(diff/60000); diff-=m*60000;
+    const s = Math.floor(diff/1000);
+    el.textContent = `⏳ Menuju ulang tahun berikutnya: ${d}h ${h}j ${m}m ${s}d`;
+  }
+  update();
+  startCountdownNext._int = setInterval(update, 1000);
+}
+document.getElementById('btnReplay').addEventListener('click', ()=>{
+  Object.keys(state.gamesDone).forEach(k=>delete state.gamesDone[k]);
+  Object.keys(state.gameStars).forEach(k=>delete state.gameStars[k]);
+  document.getElementById('menuFinalCard').style.outline='none';
+  showScreen('screenMenu');
+  renderGameHub();
+});
+
+/* ============================================================================
+   INIT
+============================================================================ */
+renderXP();
+renderAchievements();
+renderGameHub();
+</script>
+</body>
+</html>
